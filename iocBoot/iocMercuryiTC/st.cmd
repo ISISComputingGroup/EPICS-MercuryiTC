@@ -17,16 +17,19 @@ MercuryiTC_registerRecordDeviceDriver pdbbase
 ##ISIS## Run IOC initialisation 
 < $(IOCSTARTUP)/init.cmd
 
-lvDCOMConfigure("lvfp", "frontpanel", "${TOP}/MercuryiTCApp/protocol/lv_MercuryTemp_1.xml")
-
 ## Load record instances
 
 ##ISIS## Load common DB records 
 < $(IOCSTARTUP)/dbload.cmd
 
-## Load our record instances
-#dbLoadRecords("db/xxx.db","user=hgv27692Host")
-dbLoadRecords("db/MercuryTemp_1.db", "P=$(MYPVPREFIX)$(IOCNAME):")
+epicsEnvSet(TEMP_NUM,1)
+< ${TOP}/iocBoot/${IOC}/st-temp.cmd
+
+epicsEnvSet(TEMP_NUM,2)
+< ${TOP}/iocBoot/${IOC}/st-temp.cmd
+
+epicsEnvSet(TEMP_NUM,3)
+< ${TOP}/iocBoot/${IOC}/st-temp.cmd
 
 ##ISIS## Stuff that needs to be done after all records are loaded but before iocInit is called 
 < $(IOCSTARTUP)/preiocinit.cmd
