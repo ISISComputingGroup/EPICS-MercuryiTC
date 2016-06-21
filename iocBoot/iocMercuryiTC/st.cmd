@@ -31,6 +31,10 @@ epicsEnvSet(TEMP_NUM,2)
 epicsEnvSet(TEMP_NUM,3)
 < ${TOP}/iocBoot/${IOC}/st-temp.cmd
 
+epicsEnvSet(TEMP_NUM,4)
+< ${TOP}/iocBoot/${IOC}/st-temp.cmd
+
+
 ##ISIS## Stuff that needs to be done after all records are loaded but before iocInit is called 
 < $(IOCSTARTUP)/preiocinit.cmd
 
