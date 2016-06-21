@@ -20,7 +20,7 @@
 ## longer than this choose the character waveform records and adjust NELM if necessary
 
 # Read LabVIEW control/indicator "Name" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(waveform, "$(P):NAME:RBV")
+record(waveform, "$(P)NAME:RBV")
 {
 	field(DESC, "Name")
     field(DTYP, "asynOctetRead")
@@ -28,10 +28,12 @@ record(waveform, "$(P):NAME:RBV")
 	field(NELM, "256")
     field(INP,  "@asyn($(port),0,0)NAME")
     field(SCAN, ".1 second")
+	info(INTEREST, "MEDIUM")
+	info(archive, "VAL")
 }
 
 # Write to LabVIEW control "Name" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(waveform, "$(P):NAME")
+record(waveform, "$(P)NAME")
 {
 	field(DESC, "Set the name")
     field(DTYP, "asynOctetWrite")
@@ -42,7 +44,7 @@ record(waveform, "$(P):NAME")
 
 
 # Read LabVIEW control/indicator "Activity" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(bi, "$(P):ACTIVITY")
+record(bi, "$(P)ACTIVITY")
 {
 	field(DESC, "Activity")
     field(DTYP, "asynInt32")
@@ -53,57 +55,66 @@ record(bi, "$(P):ACTIVITY")
 }
 
 # Read LabVIEW control/indicator "Temperature" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(ai, "$(P):TEMP")
+record(ai, "$(P)TEMP")
 {
 	field(DESC, "Temperature")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(port),0,0)TEMP")
     field(PREC, "3")
     field(SCAN, ".1 second")
+	field(EGU, "K")
+	info(INTEREST, "HIGH")
+	info(archive, "VAL")
 }
 
 # Read LabVIEW control/indicator "Temp Set Ind" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(ai, "$(P):TEMP:SP:RBV")
+record(ai, "$(P)TEMP:SP:RBV")
 {
 	field(DESC, "Temperature set point")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(port),0,0)TEMP:SP:RBV")
     field(PREC, "3")
     field(SCAN, ".1 second")
+	field(EGU, "K")
 }
 
 # Write to LabVIEW control "Temp Set" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(ao, "$(P):TEMP:SP")
+record(ao, "$(P)TEMP:SP")
 {
 	field(DESC, "Temp Set Point")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(port),0,0)TEMP:SP")
     field(PREC, "3")
+	field(EGU, "K")
+	info(INTEREST, "HIGH")
+	info(archive, "VAL")
 }
 
 
 # Read LabVIEW control/indicator "Resistance" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(ai, "$(P):RESISTANCE")
+record(ai, "$(P)RESISTANCE")
 {
 	field(DESC, "Resistance of the temperature sensor")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(port),0,0)RESISTANCE")
     field(PREC, "3")
     field(SCAN, ".1 second")
+	field(EGU, "Ohms")
 }
 
 # Read LabVIEW control/indicator "Iterations" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(ai, "$(P):ITERATIONS")
+record(ai, "$(P)ITERATIONS")
 {
 	field(DESC, "Iterations")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(port),0,0)ITERATIONS")
     field(PREC, "3")
     field(SCAN, ".1 second")
+	field(EGU, "")
 }
 
 # Read LabVIEW control/indicator "PID Auto" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(bi, "$(P):PID:AUTO:RBV")
+record(bi, "$(P)PID:AUTO:RBV")
 {
 	field(DESC, "PID Auto set readback")
     field(DTYP, "asynInt32")
@@ -111,10 +122,12 @@ record(bi, "$(P):PID:AUTO:RBV")
     field(SCAN, ".1 second")
     field(ZNAM, "OFF")
     field(ONAM, "ON")
+	info(INTEREST, "HIGH")
+	info(archive, "VAL")
 }
 
 # Read LabVIEW control/indicator "PID Auto" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(bo, "$(P):PID:AUTO")
+record(bo, "$(P)PID:AUTO")
 {
 	field(DESC, "PID Auto set")
     field(DTYP, "asynInt32")
@@ -124,89 +137,97 @@ record(bo, "$(P):PID:AUTO")
 }
 
 # Read LabVIEW control/indicator "P Ind" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(ai, "$(P):P")
+record(ai, "$(P)P")
 {
 	field(DESC, "P for PID controller readback")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(port),0,0)P:SP:RBV")
     field(PREC, "3")
     field(SCAN, ".1 second")
+	field(EGU, "")
 }
-alias("$(P):P", "$(P):P:SP:RBV")
+alias("$(P)P", "$(P)P:SP:RBV")
 
 # Write to LabVIEW control "P" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(ao, "$(P):P:SP")
+record(ao, "$(P)P:SP")
 {
 	field(DESC, "P for PID controller")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(port),0,0)P:SP")
     field(PREC, "3")
+	field(EGU, "")
 }
 
 
 # Read LabVIEW control/indicator "I Ind" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(ai, "$(P):I")
+record(ai, "$(P)I")
 {
 	field(DESC, "I for PID controller readback")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(port),0,0)I:SP:RBV")
     field(PREC, "3")
     field(SCAN, ".1 second")
+	field(EGU, "")
 }
 
 # Write to LabVIEW control "I" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(ao, "$(P):I:SP")
+record(ao, "$(P)I:SP")
 {
 	field(DESC, "I for PID controller")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(port),0,0)I:SP")
     field(PREC, "3")
+	field(EGU, "")
 }
-alias("$(P):I", "$(P):I:SP:RBV")
+alias("$(P)I", "$(P)I:SP:RBV")
 
 # Read LabVIEW control/indicator "D Ind" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(ai, "$(P):D")
+record(ai, "$(P)D")
 {
 	field(DESC, "D for PID controller readback")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(port),0,0)D:SP:RBV")
     field(PREC, "3")
     field(SCAN, ".1 second")
+	field(EGU, "")
 }
 
 # Write to LabVIEW control "D" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(ao, "$(P):D:SP")
+record(ao, "$(P)D:SP")
 {
 	field(DESC, "D for PID controller")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(port),0,0)D:SP")
     field(PREC, "3")
+	field(EGU, "")
 }
 
-alias("$(P):D", "$(P):D:SP:RBV")
+alias("$(P)D", "$(P)D:SP:RBV")
 
 # Read LabVIEW control/indicator "Heat Ind %" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(ai, "$(P):HEATER:SP:RBV")
+record(ai, "$(P)HEATER:SP:RBV")
 {
 	field(DESC, "Heater % set point readback")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(port),0,0)HEATER:SP:RBV")
     field(PREC, "3")
     field(SCAN, ".1 second")
+	field(EGU, "%")
 }
 
 # Write to LabVIEW control "Heat %" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(ao, "$(P):HEATER:SP")
+record(ao, "$(P)HEATER:SP")
 {
 	field(DESC, "Heater % set point")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(port),0,0)HEATER:SP")
     field(PREC, "3")
+	field(EGU, "%")
 }
 
 
 # Read LabVIEW control/indicator "Heater Auto" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(bi, "$(P):HEATER:AUTO:SP:RBV")
+record(bi, "$(P)HEATER:AUTO:SP:RBV")
 {
 	field(DESC, "Heater Auto readback")
     field(DTYP, "asynInt32")
@@ -214,60 +235,69 @@ record(bi, "$(P):HEATER:AUTO:SP:RBV")
     field(SCAN, ".1 second")
     field(ZNAM, "OFF")
     field(ONAM, "ON")
+	info(INTEREST, "HIGH")
+	info(archive, "VAL")
 }
 
 # Write to LabVIEW control "Voltage Limit" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(ao, "$(P):HEATER:VOLT_LIMIT:SP")
+record(ao, "$(P)HEATER:VOLT_LIMIT:SP")
 {
 	field(DESC, "Voltage Limit for the heater")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(port),0,0)HEATER:VOLT_LIMIT:SP")
     field(PREC, "3")
+	field(EGU, "V")
 }
 
 
 # Read LabVIEW control/indicator "" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(ai, "$(P):HEATER:VOLT_LIMIT:SP:RBV")
+record(ai, "$(P)HEATER:VOLT_LIMIT:SP:RBV")
 {
 	field(DESC, "Voltage Limit for the heater readback")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(port),0,0)HEATER:VOLT_LIMIT:SP:RBV")
     field(PREC, "3")
     field(SCAN, ".1 second")
+	field(EGU, "V")
 }
 
 # Read LabVIEW control/indicator "Power" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(ai, "$(P):HEATER:POWER")
+record(ai, "$(P)HEATER:POWER")
 {
 	field(DESC, "Power used by the heater")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(port),0,0)HEATER:POWER")
     field(PREC, "3")
     field(SCAN, ".1 second")
+	field(EGU, "W")
+	info(INTEREST, "MEDIUM")
+	info(archive, "VAL")
 }
 
 # Read LabVIEW control/indicator "Voltage" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(ai, "$(P):HEATER:VOLT")
+record(ai, "$(P)HEATER:VOLT")
 {
 	field(DESC, "Voltage on the heater")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(port),0,0)HEATER:VOLT")
     field(PREC, "3")
     field(SCAN, ".1 second")
+	field(EGU, "V")
 }
 
 # Read LabVIEW control/indicator "Current" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(ai, "$(P):HEATER:CURR")
+record(ai, "$(P)HEATER:CURR")
 {
 	field(DESC, "Current on the heater")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(port),0,0)HEATER:CURR")
     field(PREC, "3")
     field(SCAN, ".1 second")
+	field(EGU, "A")
 }
 
 # Read LabVIEW control/indicator "Heater Control" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(mbbi, "$(P):HEATER:STAT:SP:RBV")
+record(mbbi, "$(P)HEATER:STAT:SP:RBV")
 {
 	field(DESC, "Heater Control readback")
     field(DTYP, "asynInt32")
@@ -279,11 +309,12 @@ record(mbbi, "$(P):HEATER:STAT:SP:RBV")
         
     field(ONVL, "1")
     field(ONST, "Manual")
-        
+	info(INTEREST, "HIGH")
+	info(archive, "VAL")
 }
 
 # Write to LabVIEW control "Heater Control" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(mbbo, "$(P):HEATER:STAT:SP")
+record(mbbo, "$(P)HEATER:STAT:SP")
 {
 	field(DESC, "Heater Control")
     field(DTYP, "asynInt32")
@@ -299,7 +330,7 @@ record(mbbo, "$(P):HEATER:STAT:SP")
 
 
 # Read LabVIEW control/indicator "Flow Auto" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(bi, "$(P):FLOW:AUTO:SP:RBV")
+record(bi, "$(P)FLOW:AUTO:SP:RBV")
 {
 	field(DESC, "Flow Auto")
     field(DTYP, "asynInt32")
@@ -307,30 +338,34 @@ record(bi, "$(P):FLOW:AUTO:SP:RBV")
     field(SCAN, ".1 second")
     field(ZNAM, "OFF")
     field(ONAM, "ON")
+	info(INTEREST, "HIGH")
+	info(archive, "VAL")
 }
 
 # Read LabVIEW control/indicator "Flow Ind %" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(ai, "$(P):FLOW:SP:RBV")
+record(ai, "$(P)FLOW:SP:RBV")
 {
 	field(DESC, "Gas flow % setpoint readback'")
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(port),0,0)FLOW:SP:RBV")
     field(PREC, "3")
     field(SCAN, ".1 second")
+	field(EGU, "%")
 }
 
 # Write to LabVIEW control "Flow %" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(ao, "$(P):FLOW:SP")
+record(ao, "$(P)FLOW:SP")
 {
 	field(DESC, "Gas flow % setpoint")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(port),0,0)FLOW:SP")
     field(PREC, "3")
+	field(EGU, "%")
 }
 
 
 # Read LabVIEW control/indicator "Gas Control" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(mbbi, "$(P):FLOW:STAT:SP:RBV")
+record(mbbi, "$(P)FLOW:STAT:SP:RBV")
 {
 	field(DESC, "Gas Control readback")
     field(DTYP, "asynInt32")
@@ -339,14 +374,14 @@ record(mbbi, "$(P):FLOW:STAT:SP:RBV")
 
     field(ZRVL, "0")
     field(ZRST, "Automatic")
-        
+
     field(ONVL, "1")
     field(ONST, "Manual")
         
 }
 
 # Write to LabVIEW control "Gas Control" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(mbbo, "$(P):FLOW:STAT:SP")
+record(mbbo, "$(P)FLOW:STAT:SP")
 {
 	field(DESC, "Gas Control")
     field(DTYP, "asynInt32")
