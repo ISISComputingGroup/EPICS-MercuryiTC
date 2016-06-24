@@ -7,5 +7,4 @@ $(IFTEMP) lvDCOMConfigure("lvfp$(TEMP_NUM)", "frontpanel_temp", "${MERCURY_ITC}/
 
 ## Load our record instances
 $(IFTEMP) dbLoadRecords("db/MercuryTemp.db", "P=$(MYPVPREFIX)$(IOCNAME):$(TEMP_NUM):,port=lvfp$(TEMP_NUM)")
-$(IFTEMP) dbLoadRecords("db/MercuryTempSim.db", "P=$(MYPVPREFIX)$(IOCNAME):$(TEMP_NUM):")
 
