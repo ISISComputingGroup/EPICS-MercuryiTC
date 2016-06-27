@@ -32,6 +32,7 @@ record(waveform, "$(P)NAME")
 	info(archive, "VAL")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:NAME")
+	field(SDIS, "$(P)DISABLE")
 }
 alias( "$(P)NAME",  "$(P)NAME:SP:RBV")
 
@@ -49,6 +50,7 @@ record(waveform, "$(P)NAME:SP")
 	info(archive, "VAL")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:NAME:SP")
+	field(SDIS, "$(P)DISABLE")
 }
 
 # Read LabVIEW control/indicator "Activity" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
@@ -62,6 +64,7 @@ record(bi, "$(P)ACTIVITY")
     field(ONAM, "ON")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:ACTIVITY")
+	field(SDIS, "$(P)DISABLE")
 }
 
 # Read LabVIEW control/indicator "Temperature" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
@@ -77,6 +80,7 @@ record(ai, "$(P)TEMP")
 	info(archive, "VAL")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:TEMP")
+	field(SDIS, "$(P)DISABLE")
 }
 
 # Read LabVIEW control/indicator "Temp Set Ind" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
@@ -90,6 +94,7 @@ record(ai, "$(P)TEMP:SP:RBV")
 	field(EGU, "K")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:TEMP:SP:RBV")
+	field(SDIS, "$(P)DISABLE")
 }
 
 # Write to LabVIEW control "Temp Set" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
@@ -104,6 +109,7 @@ record(ao, "$(P)TEMP:SP")
 	info(archive, "VAL")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:TEMP:SP")
+	field(SDIS, "$(P)DISABLE")
 }
 
 # Read LabVIEW control/indicator "Resistance" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
@@ -117,6 +123,7 @@ record(ai, "$(P)RESISTANCE")
 	field(EGU, "ohm")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:RESISTANCE")
+	field(SDIS, "$(P)DISABLE")
 }
 
 # Read LabVIEW control/indicator "Iterations" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
@@ -130,6 +137,7 @@ record(ai, "$(P)ITERATIONS")
 	field(EGU, "")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:ITERATIONS")
+	field(SDIS, "$(P)DISABLE")
 }
 
 # Read LabVIEW control/indicator "PID Auto" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
@@ -145,6 +153,7 @@ record(bi, "$(P)PID:AUTO")
 	info(archive, "VAL")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:PID:AUTO")
+	field(SDIS, "$(P)DISABLE")
 }
 alias("$(P)PID:AUTO", "$(P)PID:AUTO:SP:RBV")
 
@@ -159,6 +168,7 @@ record(bo, "$(P)PID:AUTO:SP")
 	info(archive, "VAL")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:PID:AUTO:SP")
+	field(SDIS, "$(P)DISABLE")
 }
 
 # Read LabVIEW control/indicator "P Ind" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
@@ -173,6 +183,7 @@ record(ai, "$(P)P")
 	info(archive, "VAL")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:P")
+	field(SDIS, "$(P)DISABLE")
 }
 alias("$(P)P", "$(P)P:SP:RBV")
 
@@ -187,6 +198,7 @@ record(ao, "$(P)P:SP")
 	info(archive, "VAL")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:P:SP")
+	field(SDIS, "$(P)DISABLE")
 }
 
 # Read LabVIEW control/indicator "I Ind" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
@@ -201,6 +213,7 @@ record(ai, "$(P)I")
 	info(archive, "VAL")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:I")
+	field(SDIS, "$(P)DISABLE")
 }
 alias("$(P)I", "$(P)I:SP:RBV")
 
@@ -215,6 +228,7 @@ record(ao, "$(P)I:SP")
 	info(archive, "VAL")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:I:SP")
+	field(SDIS, "$(P)DISABLE")
 }
 
 # Read LabVIEW control/indicator "D Ind" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
@@ -229,6 +243,7 @@ record(ai, "$(P)D")
 	info(archive, "VAL")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:D")
+	field(SDIS, "$(P)DISABLE")
 }
 alias("$(P)D", "$(P)D:SP:RBV")
 
@@ -243,6 +258,7 @@ record(ao, "$(P)D:SP")
 	info(archive, "VAL")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:D:SP")
+	field(SDIS, "$(P)DISABLE")
 }
 
 # Read LabVIEW control/indicator "Heat Ind %" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
@@ -257,6 +273,7 @@ record(ai, "$(P)HEATER")
 	info(archive, "VAL")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:HEATER")
+	field(SDIS, "$(P)DISABLE")
 }
 alias("$(P)HEATER", "$(P)HEATER:SP:RBV")
 
@@ -271,6 +288,7 @@ record(ao, "$(P)HEATER:SP")
 	info(archive, "VAL")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:HEATER:SP")
+	field(SDIS, "$(P)DISABLE")
 }
 
 # Write to LabVIEW control "Voltage Limit" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
@@ -284,6 +302,7 @@ record(ao, "$(P)HEATER:VOLT_LIMIT:SP")
 	info(archive, "VAL")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:HEATER:VOLT_LIMIT:SP")
+	field(SDIS, "$(P)DISABLE")
 }
 
 # Read LabVIEW control/indicator "" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
@@ -298,6 +317,7 @@ record(ai, "$(P)HEATER:VOLT_LIMIT")
 	info(archive, "VAL")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:HEATER:VOLT_LIMIT")
+	field(SDIS, "$(P)DISABLE")
 }
 alias("$(P)HEATER:VOLT_LIMIT", "$(P)HEATER:VOLT_LIMIT:SP:RBV")
 
@@ -314,6 +334,7 @@ record(ai, "$(P)HEATER:POWER")
 	info(archive, "VAL")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:HEATER:POWER")
+	field(SDIS, "$(P)DISABLE")
 }
 
 # Read LabVIEW control/indicator "Voltage" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
@@ -327,6 +348,7 @@ record(ai, "$(P)HEATER:VOLT")
 	field(EGU, "V")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:HEATER:VOLT")
+	field(SDIS, "$(P)DISABLE")
 }
 
 # Read LabVIEW control/indicator "Current" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
@@ -340,6 +362,7 @@ record(ai, "$(P)HEATER:CURR")
 	field(EGU, "A")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:HEATER:CURR")
+	field(SDIS, "$(P)DISABLE")
 }
 
 # Read LabVIEW control/indicator "Heater Control" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
@@ -358,7 +381,8 @@ record(mbbi, "$(P)HEATER:STAT:SP:RBV")
 	info(INTEREST, "HIGH")
 	info(archive, "VAL")
 	field(SIML, "$(P)SIM")
-	field(SIOL, "$(P)SIM:HEATER:STAT:SP:RBV")	
+	field(SIOL, "$(P)SIM:HEATER:STAT:SP:RBV")
+	field(SDIS, "$(P)DISABLE")	
 }
 
 # Write to LabVIEW control "Heater Control" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
@@ -376,6 +400,7 @@ record(mbbo, "$(P)HEATER:STAT:SP")
 	info(archive, "VAL")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:HEATER:STAT:SP PP")	
+	field(SDIS, "$(P)DISABLE")
 }
 
 # Read LabVIEW control/indicator "Heater Auto" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
@@ -392,6 +417,7 @@ record(bi, "$(P)HEATER:STAT")
 	info(archive, "VAL")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:HEATER:STAT")
+	field(SDIS, "$(P)DISABLE")
 }
 
 # Read LabVIEW control/indicator "Flow Ind %" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
@@ -405,6 +431,7 @@ record(ai, "$(P)FLOW")
 	field(EGU, "%")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:FLOW")
+	field(SDIS, "$(P)DISABLE")
 }
 
 # Write to LabVIEW control "Flow %" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
@@ -418,6 +445,7 @@ record(ao, "$(P)FLOW:SP")
 	info(archive, "VAL")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:FLOW:SP")
+	field(SDIS, "$(P)DISABLE")
 }
 alias("$(P)FLOW", "$(P)FLOW:SP:RBV")
 
@@ -435,6 +463,7 @@ record(bi, "$(P)FLOW:STAT")
 	info(archive, "VAL")
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:FLOW:STAT")
+	field(SDIS, "$(P)DISABLE")
 }
 
 # Read LabVIEW control/indicator "Gas Control" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
@@ -452,6 +481,7 @@ record(mbbi, "$(P)FLOW:STAT:SP:RBV")
     field(ONST, "Manual")
     field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:FLOW:STAT:SP:RBV")
+	field(SDIS, "$(P)DISABLE")
 }
 
 # Write to LabVIEW control "Gas Control" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
@@ -469,8 +499,22 @@ record(mbbo, "$(P)FLOW:STAT:SP")
     info(archive, "VAL")    
 	field(SIML, "$(P)SIM")
 	field(SIOL, "$(P)SIM:FLOW:STAT:SP PP")
+	field(SDIS, "$(P)DISABLE")
 }
 
+####################
+## DISABLE RECORD ##
+####################
+
+record(bo, "$(P)DISABLE") 
+{
+	field(DESC, "Disable comms")
+	field(PINI, "YES")
+	field(VAL, "0")
+	field(OMSL, "supervisory")
+	field(ZNAM, "COMMS ENABLED")
+	field(ONAM, "COMMS DISABLED")
+}
 
 ########################
 ## SIMULATION RECORDS ##
