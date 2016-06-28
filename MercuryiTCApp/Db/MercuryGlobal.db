@@ -1,0 +1,37 @@
+record(bo, "$(P)DISABLE") 
+{
+    field(DESC, "Disable comms")
+    field(PINI, "YES")
+    field(VAL, "0")
+    field(OMSL, "supervisory")
+    field(ZNAM, "COMMS ENABLED")
+    field(ONAM, "COMMS DISABLED")
+}
+
+record(dfanout, "$(P)DIS:FAN")
+{
+	field(DOL, "$(P)DISABLE CP")
+	field(OMSL, "closed_loop")
+	field(OUTA, "$(DISABLE1)")
+	field(OUTB, "$(DISABLE2)")
+	field(OUTC, "$(DISABLE3)")
+	field(OUTD, "$(DISABLE4)")
+}
+
+record(bo, "$(P)SIM")
+{
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+}
+
+record(dfanout, "$(P)SIM:FAN")
+{
+	field(DOL, "$(P)SIM CP")
+	field(OMSL, "closed_loop")
+	field(OUTA, "$(SIM1)")
+	field(OUTB, "$(SIM2)")
+	field(OUTC, "$(SIM3)")
+	field(OUTD, "$(SIM4)")
+}
