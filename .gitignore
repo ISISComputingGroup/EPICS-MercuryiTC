@@ -13,3 +13,4 @@ runIOC.sh
 relPaths.sh
 *.req
 data/
+.project
