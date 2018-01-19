@@ -35,7 +35,7 @@ record(stringin, "$(P)NAME")
 alias( "$(P)NAME",  "$(P)NAME:SP:RBV")
 
 # Write to LabVIEW control "Name" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(stringin, "$(P)NAME:SP")
+record(stringout, "$(P)NAME:SP")
 {
     field(DESC, "Set the name")
     field(DTYP, "asynOctetWrite")
