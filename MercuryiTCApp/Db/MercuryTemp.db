@@ -20,12 +20,10 @@
 ## longer than this choose the character waveform records and adjust NELM if necessary
 
 # Read LabVIEW control/indicator "Name" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(waveform, "$(P)NAME")
+record(stringin, "$(P)NAME")
 {
     field(DESC, "Name")
     field(DTYP, "asynOctetRead")
-    field(FTVL, "CHAR")
-    field(NELM, "256")
     field(INP,  "@asyn($(port),0,0)NAME")
     field(SCAN, ".1 second")
     info(INTEREST, "MEDIUM")
@@ -37,12 +35,10 @@ record(waveform, "$(P)NAME")
 alias( "$(P)NAME",  "$(P)NAME:SP:RBV")
 
 # Write to LabVIEW control "Name" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-record(waveform, "$(P)NAME:SP")
+record(stringin, "$(P)NAME:SP")
 {
     field(DESC, "Set the name")
     field(DTYP, "asynOctetWrite")
-    field(FTVL, "CHAR")
-    field(NELM, "256")
     #NOTE: This does push the value to the real thing, with some asyn magic
     # but in SIM mode it doesn't push its value, it pulls it from the SIM:NAME instead
     # (as waveforms are really input records)
@@ -688,4 +684,16 @@ record(calcout, "$(P)SIM:FLOW:STAT:CALC")
 {
     field(CALC, "!A")
     field(OUT, "$(P)SIM:FLOW:STAT PP")
+}
+
+record(ao, "$(P)SIM:HELIUM")
+{
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+}
+
+record(ao, "$(P)SIM:NITROGEN")
+{
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
 }
