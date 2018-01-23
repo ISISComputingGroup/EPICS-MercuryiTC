@@ -42,7 +42,7 @@ record(stringout, "$(P)NAME:SP")
     #NOTE: This does push the value to the real thing, with some asyn magic
     # but in SIM mode it doesn't push its value, it pulls it from the SIM:NAME instead
     # (as waveforms are really input records)
-    field(INP,  "@asyn($(port),0,0)NAME")
+    field(OUT,  "@asyn($(port),0,0)NAME")
     info(archive, "VAL")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:NAME:SP")
