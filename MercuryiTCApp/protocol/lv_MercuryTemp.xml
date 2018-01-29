@@ -134,8 +134,6 @@
         <read method="GCV" target="Gas Control"/>
         <set method="SCV" extint="true" target="Gas Control"/>
       </param>
-	  
-
     </vi>
   </section>
 </lvinput>

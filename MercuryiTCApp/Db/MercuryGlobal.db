@@ -16,6 +16,8 @@ record(dfanout, "$(P)DIS:FAN")
 	field(OUTB, "$(DISABLE2)")
 	field(OUTC, "$(DISABLE3)")
 	field(OUTD, "$(DISABLE4)")
+	field(OUTE, "$(DISABLE5)")
+	field(OUTF, "$(DISABLE6)")
 }
 
 record(bo, "$(P)SIM")
@@ -34,4 +36,6 @@ record(dfanout, "$(P)SIM:FAN")
 	field(OUTB, "$(SIM2)")
 	field(OUTC, "$(SIM3)")
 	field(OUTD, "$(SIM4)")
+	field(OUTE, "$(SIM5)")
+	field(OUTF, "$(SIM6)")
 }
