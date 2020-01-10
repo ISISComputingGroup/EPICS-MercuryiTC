@@ -92,7 +92,7 @@
         <read method="GCV" target="Power"/>
       </param>
       <param name="HEATER:VOLT" type="float64">
-        <read method="GCV" target="HeaterVoltage"/>
+        <read method="GCV" target="Heater Voltage"/>
       </param>
       <param name="HEATER:CURR" type="float64">
         <read method="GCV" target="Current"/>
