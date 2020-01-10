@@ -5,6 +5,7 @@ include $(TOP)/configure/CONFIG
 
 DATA += lv_MercuryTemp.xml
 DATA += lv_MercuryLevel.xml
+DATA += lv_MercuryPressure.xml
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

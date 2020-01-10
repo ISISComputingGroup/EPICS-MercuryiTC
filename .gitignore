@@ -14,3 +14,4 @@ relPaths.sh
 *.req
 data/
 .project
+*dllCopy.bat
