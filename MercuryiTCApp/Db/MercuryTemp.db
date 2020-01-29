@@ -362,9 +362,11 @@ record(ai, "$(P)HEATER:CURR")
 }
 
 # Read LabVIEW control/indicator "Heater Control" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
+#
+# Preserved for backwards compatibility - prefer to use $(P)HEATER:MODE:SP:RBV for blocks instead.
+#
 record(mbbi, "$(P)HEATER:STAT:SP:RBV")
 {
-    field(DESC, "Heater Control readback")
     field(DTYP, "asynInt32")
     field(INP,  "@asyn($(port),0,0)HEATER:STAT:SP")
     field(SCAN, ".1 second")
@@ -374,7 +376,6 @@ record(mbbi, "$(P)HEATER:STAT:SP:RBV")
         
     field(ONVL, "1")
     field(ONST, "Manual")
-    info(INTEREST, "HIGH")
     info(archive, "VAL")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:HEATER:STAT:SP:RBV")
@@ -382,6 +383,9 @@ record(mbbi, "$(P)HEATER:STAT:SP:RBV")
 }
 
 # Write to LabVIEW control "Heater Control" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
+#
+# Preserved for backwards compatibility - prefer to use $(P)HEATER:MODE:SP for blocks instead.
+#
 record(mbbo, "$(P)HEATER:STAT:SP")
 {
     field(DESC, "Heater Control")
@@ -400,6 +404,9 @@ record(mbbo, "$(P)HEATER:STAT:SP")
 }
 
 # Read LabVIEW control/indicator "Heater Auto" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
+#
+# Preserved for backwards compatibility - prefer to use $(P)HEATER:MODE for blocks instead.
+#
 record(bi, "$(P)HEATER:STAT")
 {
     field(DESC, "Heater control readback")
@@ -409,11 +416,42 @@ record(bi, "$(P)HEATER:STAT")
     # NOTE: Manual and Automatic are swapped with respect to the :SP. This is not a typo.
     field(ZNAM, "Manual")
     field(ONAM, "Automatic")
-    info(INTEREST, "HIGH")
     info(archive, "VAL")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:HEATER:STAT")
     field(SDIS, "$(P)DISABLE")
+}
+
+record(bi, "$(P)HEATER:MODE") {
+    field(DESC, "Heater mode readback")
+    field(INP, "$(P)HEATER:STAT CP MSS")
+    field(ZNAM, "Manual")
+    field(ONAM, "Auto")
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}
+
+record(bo, "$(P)HEATER:MODE:SP") {
+    field(DESC, "Heater mode setpoint")
+    field(ZNAM, "Manual")
+    field(ONAM, "Auto")
+    field(OUT, "$(P)HEATER:MODE:SP:_CALC.A PP")
+    info(archive, "VAL")
+}
+
+# Invert because $(P)HEATER:STAT:SP is the "wrong" (different) way round than expected
+record(calcout, "$(P)HEATER:MODE:SP:_CALC") {
+    field(CALC, "!A")
+    field(OUT, "$(P)HEATER:STAT:SP PP")
+}
+
+record(bi, "$(P)HEATER:MODE:SP:RBV") {
+    field(DESC, "Heater mode setpoint readback")
+    field(INP, "$(P)HEATER:STAT:SP:RBV CP MSS")
+    field(ZNAM, "Manual")
+    field(ONAM, "Auto")
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
 }
 
 # Read LabVIEW control/indicator "Flow Ind %" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
