@@ -1,0 +1,26 @@
+Terminator = LF;
+
+getP {
+    out "READ:DEV:MB0:TEMP:LOOP:P";
+    in "STAT:DEV:MB0:TEMP:LOOP:P:%f";
+}
+
+getI {
+    out "READ:DEV:MB0:TEMP:LOOP:I";
+    in "STAT:DEV:MB0:TEMP:LOOP:I:%f";
+}
+
+getD {
+    out "READ:DEV:MB0:TEMP:LOOP:D";
+    in "STAT:DEV:MB0:TEMP:LOOP:D:%f";
+}
+
+getTemp {
+    out "READ:DEV:MB0:TEMP:SIG:TEMP";
+    in "STAT:DEV:MB0:TEMP:SIG:TEMP:%fK";
+}
+
+getTempSp {
+    out "READ:DEV:MB0:TEMP:LOOP:TSET";
+    in "STAT:DEV:MB0:TEMP:LOOP:TSET:%fK";
+}
