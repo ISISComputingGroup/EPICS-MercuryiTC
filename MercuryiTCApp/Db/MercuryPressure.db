@@ -1,11 +1,3 @@
-
-# Initially auto-generated
-# 
-
-# 
-# Definitions from configSection "frontpanel" in XML input file
-#
-#     lvDCOMConfigure("$(port)", "frontpanel", "/path/to/lvinput.xml")
 # 
 # MACROS for IOC
 # P - base name of the IOC including IOC number and panel number

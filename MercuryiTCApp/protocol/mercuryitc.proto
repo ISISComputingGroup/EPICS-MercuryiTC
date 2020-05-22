@@ -1,6 +1,36 @@
 Terminator = LF;
 
+getName {
+    out "READ:DEV:MB0:TEMP:NICK";
+    in "STAT:DEV:MB0:TEMP:NICK:%s";
+}
+
+setName {
+    out "SET:DEV:MB0:TEMP:NICK:%s";
+    in "STAT:DEV:MB0:TEMP:NICK:%*[^:]:VALID";
+}
+
+getHtrChan {
+    out "READ:DEV:MB0:TEMP:LOOP:HTR";
+    in "STAT:DEV:MB0:TEMP:LOOP:HTR:%s";
+}
+
+getAuxChan {
+    out "READ:DEV:MB0:TEMP:LOOP:AUX";
+    in "STAT:DEV:MB0:TEMP:LOOP:AUX:%s";
+}
+
 # PID parameters
+
+getAutoPid {
+    out "READ:DEV:MB0:TEMP:LOOP:PIDT";
+    in "STAT:DEV:MB0:TEMP:LOOP:PIDT:%{OFF|ON}";
+}
+
+setAutoPid {
+    out "SET:DEV:MB0:TEMP:LOOP:PIDT:%{OFF|ON}";
+    in "STAT:SET:DEV:MB0:TEMP:LOOP:PIDT:%*{OFF|ON}:VALID";
+}
 
 getP {
     out "READ:DEV:MB0:TEMP:LOOP:P";
@@ -77,28 +107,28 @@ setHtr {
 }
 
 getHtrVolt {
-    out "READ:DEV:DB0:HTR:SIG:VOLT";
-    in "STAT:DEV:DB0:HTR:SIG:VOLT:%fV";
+    out "READ:DEV:%(\$1)s:HTR:SIG:VOLT";
+    in "STAT:DEV:%*[^:]:HTR:SIG:VOLT:%fV";
 }
 
 getHtrCurr {
-    out "READ:DEV:DB0:HTR:SIG:CURR";
-    in "STAT:DEV:DB0:HTR:SIG:CURR:%fA";
+    out "READ:DEV:%(\$1)s:HTR:SIG:CURR";
+    in "STAT:DEV:%*[^:]:HTR:SIG:CURR:%fA";
 }
 
 getHtrPowr {
-    out "READ:DEV:DB0:HTR:SIG:POWR";
-    in "STAT:DEV:DB0:HTR:SIG:POWR:%fW";
+    out "READ:DEV:%(\$1)s:HTR:SIG:POWR";
+    in "STAT:DEV:%*[^:]:HTR:SIG:POWR:%fW";
 }
 
 getHtrVlim {
-    out "READ:DEV:DB0:HTR:VLIM";
-    in "STAT:DEV:DB0:HTR:VLIM:%f";
+    out "READ:DEV:%(\$1)s:HTR:VLIM";
+    in "STAT:DEV:%*[^:]:HTR:VLIM:%f";
 }
 
 setHtrVlim {
-    out "SET:DEV:DB0:HTR:VLIM:%f";
-    in "STAT:SET:DEV:DB0:HTR:VLIM:%*f:VALID";
+    out "SET:DEV:%(\$1)s:HTR:VLIM:%f";
+    in "STAT:SET:DEV:%*[^:]:HTR:VLIM:%*f:VALID";
 }
 
 # Gas flow
@@ -114,8 +144,8 @@ setGasFlowMode {
 }
 
 getGasFlow {
-    out "READ:DEV:DB1:AUX:SIG:PERC";
-    in "STAT:DEV:DB1:AUX:SIG:PERC:%f";
+    out "READ:DEV:%(\$1)s:AUX:SIG:PERC";
+    in "STAT:DEV:%*[^:]:AUX:SIG:PERC:%f";
 }
 
 setGasFlow {

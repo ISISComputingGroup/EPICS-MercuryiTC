@@ -1,12 +1,3 @@
-
-# Initially auto-generated
-# 
-
-# 
-# Definitions from configSection "frontpanel" in XML input file
-#
-#     lvDCOMConfigure("$(PORT)", "frontpanel", "/path/to/lvinput.xml")
-# 
 # MACROS for IOC
 # P - base name of the IOC including IOC number and panel number
 # IOC_NUM - the ioc's number sets the first panel number (e.g. Mercury - Front Panel $(IOC_NUM) - TEMP $(VI_TEMP_X)
@@ -19,36 +10,52 @@
 ## EPICS strings are restricted to 40 characters in length, if your strings are
 ## longer than this choose the character waveform records and adjust NELM if necessary
 
-# # Read LabVIEW control/indicator "Name" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-# record(stringin, "$(P)NAME")
-# {
-#     field(DESC, "Name")
-#     field(DTYP, "asynOctetRead")
-#     field(INP,  "@asyn($(PORT),0,0)NAME")
-#     field(SCAN, ".1 second")
-#     info(INTEREST, "MEDIUM")
-#     info(archive, "VAL")
-#     field(SIML, "$(P)SIM")
-#     field(SIOL, "$(P)SIM:NAME")
-#     field(SDIS, "$(P)DISABLE")
-# }
-# alias( "$(P)NAME",  "$(P)NAME:SP:RBV")
-# 
-# # Write to LabVIEW control "Name" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-# record(stringout, "$(P)NAME:SP")
-# {
-#     field(DESC, "Set the name")
-#     field(DTYP, "asynOctetWrite")
-#     #NOTE: This does push the value to the real thing, with some asyn magic
-#     # but in SIM mode it doesn't push its value, it pulls it from the SIM:NAME instead
-#     # (as waveforms are really input records)
-#     field(OUT,  "@asyn($(PORT),0,0)NAME")
-#     info(archive, "VAL")
-#     field(SIML, "$(P)SIM")
-#     field(SIOL, "$(P)SIM:NAME:SP")
-#     field(SDIS, "$(P)DISABLE")
-# }
+record(stringin, "$(P)NAME")
+{
+    field(DESC, "Name")
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getName $(PORT)")
+    field(SCAN, "5 second")
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:NAME")
+    field(SDIS, "$(P)DISABLE")
+}
+alias( "$(P)NAME",  "$(P)NAME:SP:RBV")
 
+record(stringout, "$(P)NAME:SP")
+{
+    field(DESC, "Set the name")
+    field(DTYP, "stream")
+    field(OUT,  "@mercuryitc.proto setName $(PORT)")
+    info(archive, "VAL")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:NAME:SP")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(stringin, "$(P)HTRCHAN") {
+    field(DESC, "The HTR channel for this sensor")
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getHtrChan $(PORT)")
+    field(SCAN, "5 second")
+    field(PINI, "YES")
+    
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}
+
+record(stringin, "$(P)AUXCHAN") {
+    field(DESC, "The AUX channel for this sensor")
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getAuxChan $(PORT)")
+    field(SCAN, "10 second")  # this is unlikely to change much at runtime so scan slowly
+    field(PINI, "YES")
+    
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}
 
 record(ai, "$(P)TEMP")
 {
@@ -98,7 +105,7 @@ record(ai, "$(P)RESISTANCE")
     field(DTYP, "stream")
     field(INP,  "@mercuryitc.proto getRes $(PORT)")
     field(PREC, "3")
-    field(SCAN, "1 second")
+    field(SCAN, "5 second")
     field(EGU, "ohm")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:RESISTANCE")
@@ -107,36 +114,34 @@ record(ai, "$(P)RESISTANCE")
 
 
 
-# # Read LabVIEW control/indicator "PID Auto" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-# record(bi, "$(P)PID:AUTO")
-# {
-#     field(DESC, "PID setting are automatic")
-#     field(DTYP, "asynInt32")
-#     field(INP,  "@asyn($(PORT),0,0)PID:AUTO:SP")
-#     field(SCAN, ".1 second")
-#     field(ZNAM, "OFF")
-#     field(ONAM, "ON")
-#     info(INTEREST, "HIGH")
-#     info(archive, "VAL")
-#     field(SIML, "$(P)SIM")
-#     field(SIOL, "$(P)SIM:PID:AUTO")
-#     field(SDIS, "$(P)DISABLE")
-# }
-# alias("$(P)PID:AUTO", "$(P)PID:AUTO:SP:RBV")
-# 
-# # Read LabVIEW control/indicator "PID Auto" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-# record(bo, "$(P)PID:AUTO:SP")
-# {
-#     field(DESC, "PID setting are automatic")
-#     field(DTYP, "asynInt32")
-#     field(OUT,  "@asyn($(PORT),0,0)PID:AUTO:SP")
-#     field(ZNAM, "OFF")
-#     field(ONAM, "ON")
-#     info(archive, "VAL")
-#     field(SIML, "$(P)SIM")
-#     field(SIOL, "$(P)SIM:PID:AUTO:SP")
-#     field(SDIS, "$(P)DISABLE")
-# }
+record(bi, "$(P)PID:AUTO")
+{
+    field(DESC, "PID setting are automatic")
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getAutoPid $(PORT)")
+    field(SCAN, "5 second")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:PID:AUTO")
+    field(SDIS, "$(P)DISABLE")
+}
+alias("$(P)PID:AUTO", "$(P)PID:AUTO:SP:RBV")
+
+record(bo, "$(P)PID:AUTO:SP")
+{
+    field(DESC, "PID setting are automatic")
+    field(DTYP, "stream")
+    field(OUT,  "@mercuryitc.proto setAutoPid $(PORT)")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+    info(archive, "VAL")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:PID:AUTO:SP")
+    field(SDIS, "$(P)DISABLE")
+}
 
 record(ai, "$(P)P")
 {
@@ -144,7 +149,7 @@ record(ai, "$(P)P")
     field(DTYP, "stream")
     field(INP,  "@mercuryitc.proto getP $(PORT)")
     field(PREC, "3")
-    field(SCAN, "1 second")
+    field(SCAN, "5 second")
     field(EGU, "")
     info(archive, "VAL")
     field(SIML, "$(P)SIM")
@@ -172,7 +177,7 @@ record(ai, "$(P)I")
     field(DTYP, "stream")
     field(INP,  "@mercuryitc.proto getI $(PORT)")
     field(PREC, "3")
-    field(SCAN, "1 second")
+    field(SCAN, "5 second")
     field(EGU, "")
     info(archive, "VAL")
     field(SIML, "$(P)SIM")
@@ -200,7 +205,7 @@ record(ai, "$(P)D")
     field(DTYP, "stream")
     field(INP,  "@mercuryitc.proto getD $(PORT)")
     field(PREC, "3")
-    field(SCAN, "1 second")
+    field(SCAN, "5 second")
     field(EGU, "")
     info(archive, "VAL")
     field(SIML, "$(P)SIM")
@@ -256,7 +261,7 @@ record(ao, "$(P)HEATER:VOLT_LIMIT:SP")
 {
     field(DESC, "Voltage Limit for the heater")
     field(DTYP, "stream")
-    field(OUT,  "@mercuryitc.proto setHtrVlim $(PORT)")
+    field(OUT,  "@mercuryitc.proto setHtrVlim($(P)HTRCHAN) $(PORT)")
     field(PREC, "3")
     field(EGU, "V")
     info(archive, "VAL")
@@ -269,9 +274,9 @@ record(ai, "$(P)HEATER:VOLT_LIMIT")
 {
     field(DESC, "Voltage Limit for the heater readback")
     field(DTYP, "stream")
-    field(INP,  "@mercuryitc.proto getHtrVlim $(PORT)")
+    field(INP,  "@mercuryitc.proto getHtrVlim($(P)HTRCHAN) $(PORT)")
     field(PREC, "3")
-    field(SCAN, "1 second")
+    field(SCAN, "5 second")
     field(EGU, "V")
     info(archive, "VAL")
     field(SIML, "$(P)SIM")
@@ -284,9 +289,9 @@ record(ai, "$(P)HEATER:POWER")
 {
     field(DESC, "Power used by the heater")
     field(DTYP, "stream")
-    field(INP,  "@mercuryitc.proto getHtrPowr $(PORT)")
+    field(INP,  "@mercuryitc.proto getHtrPowr($(P)HTRCHAN) $(PORT)")
     field(PREC, "3")
-    field(SCAN, "1 second")
+    field(SCAN, "5 second")
     field(EGU, "")
     info(INTEREST, "MEDIUM")
     info(archive, "VAL")
@@ -299,9 +304,9 @@ record(ai, "$(P)HEATER:VOLT")
 {
     field(DESC, "Voltage on the heater")
     field(DTYP, "stream")
-    field(INP,  "@mercuryitc.proto getHtrVolt $(PORT)")
+    field(INP,  "@mercuryitc.proto getHtrVolt($(P)HTRCHAN) $(PORT)")
     field(PREC, "3")
-    field(SCAN, "1 second")
+    field(SCAN, "5 second")
     field(EGU, "V")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:HEATER:VOLT")
@@ -312,9 +317,9 @@ record(ai, "$(P)HEATER:CURR")
 {
     field(DESC, "Current on the heater")
     field(DTYP, "stream")
-    field(INP,  "@mercuryitc.proto getHtrCurr $(PORT)")
+    field(INP,  "@mercuryitc.proto getHtrCurr($(P)HTRCHAN) $(PORT)")
     field(PREC, "3")
-    field(SCAN, "1 second")
+    field(SCAN, "5 second")
     field(EGU, "A")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:HEATER:CURR")
@@ -325,7 +330,7 @@ record(bi, "$(P)HEATER:MODE") {
     field(DESC, "Heater mode readback")
     field(DTYP, "stream")
     field(INP, "@mercuryitc.proto getHtrMode $(PORT)")
-    field(SCAN, "1 second")
+    field(SCAN, "5 second")
     field(ZNAM, "Manual")
     field(ONAM, "Auto")
     info(INTEREST, "HIGH")
@@ -347,7 +352,7 @@ record(ai, "$(P)FLOW")
 {
     field(DESC, "Gas flow % setpoint readback'")
     field(DTYP, "stream")
-    field(INP,  "@mercuryitc.proto getGasFlow $(PORT)")
+    field(INP,  "@mercuryitc.proto getGasFlow($(P)AUXCHAN) $(PORT)")
     field(PREC, "3")
     field(SCAN, "1 second")
     field(EGU, "%")
@@ -375,7 +380,7 @@ record(bi, "$(P)FLOW:STAT")
     field(DESC, "Flow Auto")
     field(DTYP, "stream")
     field(INP,  "@mercuryitc.proto getGasFlowMode $(PORT)")
-    field(SCAN, "1 second")
+    field(SCAN, "5 second")
     field(ZNAM, "Manual")
     field(ONAM, "Auto")
     info(INTEREST, "HIGH")
