@@ -1,8 +1,15 @@
 Terminator = LF;
 
+# PID parameters
+
 getP {
     out "READ:DEV:MB0:TEMP:LOOP:P";
     in "STAT:DEV:MB0:TEMP:LOOP:P:%f";
+}
+
+setP {
+    out "SET:DEV:MB0:TEMP:LOOP:P:%f";
+    in "STAT:SET:DEV:MB0:TEMP:LOOP:P:%*f:VALID";
 }
 
 getI {
@@ -10,10 +17,22 @@ getI {
     in "STAT:DEV:MB0:TEMP:LOOP:I:%f";
 }
 
+setI {
+    out "SET:DEV:MB0:TEMP:LOOP:I:%f";
+    in "STAT:SET:DEV:MB0:TEMP:LOOP:I:%*f:VALID";
+}
+
 getD {
     out "READ:DEV:MB0:TEMP:LOOP:D";
     in "STAT:DEV:MB0:TEMP:LOOP:D:%f";
 }
+
+setD {
+    out "SET:DEV:MB0:TEMP:LOOP:D:%f";
+    in "STAT:SET:DEV:MB0:TEMP:LOOP:D:%*f:VALID";
+}
+
+# Temperatures
 
 getTemp {
     out "READ:DEV:MB0:TEMP:SIG:TEMP";
@@ -23,4 +42,83 @@ getTemp {
 getTempSp {
     out "READ:DEV:MB0:TEMP:LOOP:TSET";
     in "STAT:DEV:MB0:TEMP:LOOP:TSET:%fK";
+}
+
+setTempSp {
+    out "SET:DEV:MB0:TEMP:LOOP:TSET:%fK";
+    in "STAT:SET:DEV:MB0:TEMP:LOOP:TSET:%fK:VALID";
+}
+
+getRes {
+    out "READ:DEV:MB0:TEMP:SIG:RES";
+    in "STAT:DEV:MB0:TEMP:SIG:RES:%fO";
+}
+
+# Heater
+
+getHtrMode {
+    out "READ:DEV:MB0:TEMP:LOOP:ENAB";
+    in "STAT:DEV:MB0:TEMP:LOOP:ENAB:%{OFF|ON}";
+}
+
+setHtrMode {
+    out "SET:DEV:MB0:TEMP:LOOP:ENAB:%{OFF|ON}";
+    in "STAT:SET:DEV:MB0:TEMP:LOOP:ENAB:%*{OFF|ON}:VALID";
+}
+
+getHtr {
+    out "READ:DEV:MB0:TEMP:LOOP:HSET";
+    in "STAT:DEV:MB0:TEMP:LOOP:HSET:%f";
+}
+
+setHtr {
+    out "SET:DEV:MB0:TEMP:LOOP:HSET:%f";
+    in "STAT:SET:DEV:MB0:TEMP:LOOP:HSET:%*f:VALID";
+}
+
+getHtrVolt {
+    out "READ:DEV:DB0:HTR:SIG:VOLT";
+    in "STAT:DEV:DB0:HTR:SIG:VOLT:%fV";
+}
+
+getHtrCurr {
+    out "READ:DEV:DB0:HTR:SIG:CURR";
+    in "STAT:DEV:DB0:HTR:SIG:CURR:%fA";
+}
+
+getHtrPowr {
+    out "READ:DEV:DB0:HTR:SIG:POWR";
+    in "STAT:DEV:DB0:HTR:SIG:POWR:%fW";
+}
+
+getHtrVlim {
+    out "READ:DEV:DB0:HTR:VLIM";
+    in "STAT:DEV:DB0:HTR:VLIM:%f";
+}
+
+setHtrVlim {
+    out "SET:DEV:DB0:HTR:VLIM:%f";
+    in "STAT:SET:DEV:DB0:HTR:VLIM:%*f:VALID";
+}
+
+# Gas flow
+
+getGasFlowMode {
+    out "READ:DEV:MB0:TEMP:LOOP:FAUT";
+    in "STAT:DEV:MB0:TEMP:LOOP:FAUT:%{OFF|ON}";
+}
+
+setGasFlowMode {
+    out "SET:DEV:MB0:TEMP:LOOP:FAUT:%{OFF|ON}";
+    in "STAT:SET:DEV:MB0:TEMP:LOOP:FAUT:%*{OFF|ON}:VALID";
+}
+
+getGasFlow {
+    out "READ:DEV:DB1:AUX:SIG:PERC";
+    in "STAT:DEV:DB1:AUX:SIG:PERC:%f";
+}
+
+setGasFlow {
+    out "SET:DEV:MB0:TEMP:LOOP:FSET:%f";
+    in "STAT:SET:DEV:MB0:TEMP:LOOP:FSET:%*f:VALID";
 }
