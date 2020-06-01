@@ -5,10 +5,6 @@
 # VI_TEMP_2 - the first temp panel number (usually 2 or blank for do not use)
 # VI_TEMP_3 - the first temp panel number (usually 3 or blank for do not use)
 # VI_TEMP_4 - the first temp panel number (usually 4 or blank for do not use)
-      
-## Creating both stringout/stringin and waveform records for "Name" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Temperature.llb/Mercury - Front Panel 1 - Temp 1.vi"
-## EPICS strings are restricted to 40 characters in length, if your strings are
-## longer than this choose the character waveform records and adjust NELM if necessary
 
 record(stringin, "$(P)NAME")
 {
@@ -50,7 +46,7 @@ record(stringin, "$(P)AUXCHAN") {
     field(DESC, "The AUX channel for this sensor")
     field(DTYP, "stream")
     field(INP,  "@mercuryitc.proto getAuxChan $(PORT)")
-    field(SCAN, "10 second")  # this is unlikely to change much at runtime so scan slowly
+    field(SCAN, "5 second")
     field(PINI, "YES")
     
     info(INTEREST, "HIGH")
