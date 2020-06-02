@@ -1,13 +1,17 @@
 Terminator = LF;
 
-getName {
-    out "READ:DEV:\$1:\$2:NICK";
-    in "STAT:DEV:\$1:\$2:NICK:%s";
-}
+# System-wide commands
 
 getCatalog {
     out "READ:SYS:CAT";
     in "STAT:SYS:CAT:DEV:%1024c";
+}
+
+# Channel metadata
+
+getName {
+    out "READ:DEV:\$1:\$2:NICK";
+    in "STAT:DEV:\$1:\$2:NICK:%s";
 }
 
 setName {
@@ -84,9 +88,37 @@ setTempSp {
     in "STAT:SET:DEV:\$1:\$2:LOOP:TSET:%fK:VALID";
 }
 
+# Pressures
+
+getPres {
+    out "READ:DEV:\$1:\$2:SIG:PRES";
+    in "STAT:DEV:\$1:\$2:SIG:PRES:%fmBar";
+}
+
+getPresSp {
+    # NOTE: despite reading pressure this still looks at TSET for the control loop.
+    out "READ:DEV:\$1:\$2:LOOP:TSET";
+    in "STAT:DEV:\$1:\$2:LOOP:TSET:%fmBar";
+}
+
+setPresSp {
+    # NOTE: despite reading pressure this still looks at TSET for the control loop.
+    out "SET:DEV:\$1:\$2:LOOP:TSET:%fmBar";
+    in "STAT:SET:DEV:\$1:\$2:LOOP:TSET:%fmBar:VALID";
+}
+
+# Raw sensor readings
+
 getRes {
+    # Resistance is only used for temperature cards
     out "READ:DEV:\$1:\$2:SIG:RES";
     in "STAT:DEV:\$1:\$2:SIG:RES:%fO";
+}
+
+getVolt {
+    # Voltage is only used for pressure cards
+    out "READ:DEV:\$1:\$2:SIG:VOLT";
+    in "STAT:DEV:\$1:\$2:SIG:VOLT:%fV";
 }
 
 # Heater
