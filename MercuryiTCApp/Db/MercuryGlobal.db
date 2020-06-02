@@ -39,3 +39,57 @@ record(dfanout, "$(P)SIM:FAN")
 	field(OUTE, "$(SIM5)")
 	field(OUTF, "$(SIM6)")
 }
+
+record(waveform, "$(P)CATALOG:_RAW")
+{
+    field(DESC, "Name")
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getCatalog $(PORT)")
+    field(NELM, "1024")
+    field(FTVL, "CHAR")
+    field(SCAN, "10 second")
+    field(PINI, "YES")
+    info(archive, "VAL")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:CATALOG:_RAW")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(aSub, "$(P)CATALOG:_PARSE") 
+{
+    field(SNAM, "mercury_parse_catalog")
+    field(INPA, "$(P)CATALOG:_RAW CP MS")
+    field(FTA, "CHAR")
+    field(NOA, "1024")
+      
+    field(OUTA, "$(P)CATALOG:DEVICENAMES PP")
+    field(FTVA, "STRING")
+    field(NOVA, "64")
+      
+    field(OUTB, "$(P)CATALOG:DEVICETYPES PP")
+    field(FTVB, "STRING")
+    field(NOVB, "64")
+}
+
+record(waveform, "$(P)CATALOG:DEVICENAMES")
+{
+    field(DESC, "Device names in mercury catalog")
+    field(NELM, "64")
+    field(FTVL, "STRING")
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+}
+
+record(waveform, "$(P)CATALOG:DEVICETYPES")
+{
+    field(DESC, "Device names in mercury catalog")
+    field(NELM, "64")
+    field(FTVL, "STRING")
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+}
+
+record(waveform, "$(P)SIM:CATALOG:_RAW")
+{
+    
+}

@@ -1,21 +1,13 @@
-# 
 # MACROS for IOC
 # P - base name of the IOC including IOC number and panel number
-# IOC_NUM - the ioc's number sets the first panel number (e.g. Mercury - Front Panel $(IOC_NUM) - PRESSURE $(VI_PRESSURE_X)
-# VI_PRESSURE_1 - the first pressure panel number (usually 1 or blank for do not use)
-# VI_PRESSURE_2 - the first pressure panel number (usually 2 or blank for do not use)
-      
-## Creating both stringout/stringin and waveform records for "Name" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
-## EPICS strings are restricted to 40 characters in length, if your strings are
-## longer than this choose the character waveform records and adjust NELM if necessary
+# BOARD - the mercury control board that this DB is looking at (e.g. MB0)
 
-# Read LabVIEW control/indicator "Name" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
 record(stringin, "$(P)NAME")
 {
     field(DESC, "Name")
-    field(DTYP, "asynOctetRead")
-    field(INP,  "@asyn($(port),0,0)NAME")
-    field(SCAN, ".1 second")
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getName($(BOARD),PRES) $(PORT)")
+    field(SCAN, "5 second")
     info(INTEREST, "MEDIUM")
     info(archive, "VAL")
     field(SIML, "$(P)SIM")
@@ -24,115 +16,102 @@ record(stringin, "$(P)NAME")
 }
 alias( "$(P)NAME",  "$(P)NAME:SP:RBV")
 
-# Write to LabVIEW control "Name" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
 record(stringout, "$(P)NAME:SP")
 {
     field(DESC, "Set the name")
-    field(DTYP, "asynOctetWrite")
-    #NOTE: This does push the value to the real thing, with some asyn magic
-    # but in SIM mode it doesn't push its value, it pulls it from the SIM:NAME instead
-    # (as waveforms are really input records)
-    field(OUT,  "@asyn($(port),0,0)NAME")
+    field(DTYP, "stream")
+    field(OUT,  "@mercuryitc.proto setName($(BOARD),PRES) $(PORT)")
     info(archive, "VAL")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:NAME:SP")
     field(SDIS, "$(P)DISABLE")
 }
 
-# Read LabVIEW control/indicator "Activity" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
-record(bi, "$(P)ACTIVITY")
-{
-    field(DESC, "Activity")
-    field(DTYP, "asynInt32")
-    field(INP,  "@asyn($(port),0,0)ACTIVITY")
-    field(SCAN, ".1 second")
-    field(ZNAM, "OFF")
-    field(ONAM, "ON")
-    field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:ACTIVITY")
-    field(SDIS, "$(P)DISABLE")
+record(stringin, "$(P)HTRCHAN") {
+    field(DESC, "The HTR channel for this sensor")
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getHtrChan($(BOARD),PRES) $(PORT)")
+    field(SCAN, "5 second")
+    field(PINI, "YES")
+    
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
 }
 
-# Read LabVIEW control/indicator "Pressure" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
-record(ai, "$(P)PRESSURE")
+record(stringin, "$(P)AUXCHAN") {
+    field(DESC, "The AUX channel for this sensor")
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getAuxChan($(BOARD),PRES) $(PORT)")
+    field(SCAN, "5 second")
+    field(PINI, "YES")
+    
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}
+
+record(ai, "$(P)TEMP")
 {
-    field(DESC, "Pressure")
-    field(DTYP, "asynFloat64")
-    field(INP,  "@asyn($(port),0,0)PRESSURE")
+    field(DESC, "Temperature")
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getTemp($(BOARD),PRES) $(PORT)")
     field(PREC, "3")
-    field(SCAN, ".1 second")
-    field(EGU, "mbar")
+    field(SCAN, "1 second")
+    field(EGU, "K")
     info(INTEREST, "HIGH")
     info(archive, "VAL")
     field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:PRESSURE")
+    field(SIOL, "$(P)SIM:TEMP")
     field(SDIS, "$(P)DISABLE")
 }
 
-# Read LabVIEW control/indicator "Pressure Set Ind" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
-record(ai, "$(P)PRESSURE:SP:RBV")
+record(ai, "$(P)TEMP:SP:RBV")
 {
-    field(DESC, "Pressure set point rbv")
-    field(DTYP, "asynFloat64")
-    field(INP,  "@asyn($(port),0,0)PRESSURE:SP:RBV")
+    field(DESC, "Temperature set point")
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getTempSp($(BOARD),PRES) $(PORT)")
     field(PREC, "3")
-    field(SCAN, ".1 second")
-    field(EGU, "mbar")
+    field(SCAN, "1 second")
+    field(EGU, "K")
     field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:PRESSURE:SP:RBV")
+    field(SIOL, "$(P)SIM:TEMP:SP:RBV")
     field(SDIS, "$(P)DISABLE")
 }
 
-# Write to LabVIEW control "Pressure Set" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
-record(ao, "$(P)PRESSURE:SP")
+record(ao, "$(P)TEMP:SP")
 {
-    field(DESC, "Pressure Set Point")
-    field(DTYP, "asynFloat64")
-    field(OUT,  "@asyn($(port),0,0)PRESSURE:SP")
+    field(DESC, "Temp Set Point")
+    field(DTYP, "stream")
+    field(OUT,  "@mercuryitc.proto setTempSp($(BOARD),PRES) $(PORT)")
     field(PREC, "3")
-    field(EGU, "mbar")
+    field(EGU, "K")
     info(INTEREST, "HIGH")
     info(archive, "VAL")
     field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:PRESSURE:SP")
+    field(SIOL, "$(P)SIM:TEMP:SP")
     field(SDIS, "$(P)DISABLE")
 }
-
-# Read LabVIEW control/indicator "Voltage" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
-record(ai, "$(P)VOLT")
+ 
+record(ai, "$(P)RESISTANCE")
 {
-    field(DESC, "Voltage at sensor")
-    field(DTYP, "asynFloat64")
-    field(INP,  "@asyn($(port),0,0)VOLT")
+    field(DESC, "Resistance of the temperature sensor")
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getRes($(BOARD),PRES) $(PORT)")
     field(PREC, "3")
-    field(SCAN, ".1 second")
-    field(EGU, "V")
+    field(SCAN, "5 second")
+    field(EGU, "ohm")
     field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:VOLT")
+    field(SIOL, "$(P)SIM:RESISTANCE")
     field(SDIS, "$(P)DISABLE")
 }
 
-# Read LabVIEW control/indicator "Iterations" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
-record(ai, "$(P)ITERATIONS")
-{
-    field(DESC, "Iterations")
-    field(DTYP, "asynFloat64")
-    field(INP,  "@asyn($(port),0,0)ITERATIONS")
-    field(PREC, "3")
-    field(SCAN, ".1 second")
-    field(EGU, "")
-    field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:ITERATIONS")
-    field(SDIS, "$(P)DISABLE")
-}
 
-# Read LabVIEW control/indicator "PID Auto" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
+
 record(bi, "$(P)PID:AUTO")
 {
     field(DESC, "PID setting are automatic")
-    field(DTYP, "asynInt32")
-    field(INP,  "@asyn($(port),0,0)PID:AUTO:SP")
-    field(SCAN, ".1 second")
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getAutoPid($(BOARD),PRES) $(PORT)")
+    field(SCAN, "5 second")
     field(ZNAM, "OFF")
     field(ONAM, "ON")
     info(INTEREST, "HIGH")
@@ -143,12 +122,11 @@ record(bi, "$(P)PID:AUTO")
 }
 alias("$(P)PID:AUTO", "$(P)PID:AUTO:SP:RBV")
 
-# Read LabVIEW control/indicator "PID Auto" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
 record(bo, "$(P)PID:AUTO:SP")
 {
     field(DESC, "PID setting are automatic")
-    field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(port),0,0)PID:AUTO:SP")
+    field(DTYP, "stream")
+    field(OUT,  "@mercuryitc.proto setAutoPid($(BOARD),PRES) $(PORT)")
     field(ZNAM, "OFF")
     field(ONAM, "ON")
     info(archive, "VAL")
@@ -157,14 +135,13 @@ record(bo, "$(P)PID:AUTO:SP")
     field(SDIS, "$(P)DISABLE")
 }
 
-# Read LabVIEW control/indicator "P Ind" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
 record(ai, "$(P)P")
 {
     field(DESC, "P for PID controller readback")
-    field(DTYP, "asynFloat64")
-    field(INP,  "@asyn($(port),0,0)P:SP:RBV")
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getP($(BOARD),PRES) $(PORT)")
     field(PREC, "3")
-    field(SCAN, ".1 second")
+    field(SCAN, "5 second")
     field(EGU, "")
     info(archive, "VAL")
     field(SIML, "$(P)SIM")
@@ -173,12 +150,11 @@ record(ai, "$(P)P")
 }
 alias("$(P)P", "$(P)P:SP:RBV")
 
-# Write to LabVIEW control "P" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
 record(ao, "$(P)P:SP")
 {
     field(DESC, "P for PID controller")
-    field(DTYP, "asynFloat64")
-    field(OUT,  "@asyn($(port),0,0)P:SP")
+    field(DTYP, "stream")
+    field(OUT,  "@mercuryitc.proto setP($(BOARD),PRES) $(PORT)")
     field(PREC, "3")
     field(EGU, "")
     info(archive, "VAL")
@@ -187,14 +163,13 @@ record(ao, "$(P)P:SP")
     field(SDIS, "$(P)DISABLE")
 }
 
-# Read LabVIEW control/indicator "I Ind" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
 record(ai, "$(P)I")
 {
     field(DESC, "I for PID controller readback")
-    field(DTYP, "asynFloat64")
-    field(INP,  "@asyn($(port),0,0)I:SP:RBV")
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getI($(BOARD),PRES) $(PORT)")
     field(PREC, "3")
-    field(SCAN, ".1 second")
+    field(SCAN, "5 second")
     field(EGU, "")
     info(archive, "VAL")
     field(SIML, "$(P)SIM")
@@ -203,12 +178,11 @@ record(ai, "$(P)I")
 }
 alias("$(P)I", "$(P)I:SP:RBV")
 
-# Write to LabVIEW control "I" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
 record(ao, "$(P)I:SP")
 {
     field(DESC, "I for PID controller")
-    field(DTYP, "asynFloat64")
-    field(OUT,  "@asyn($(port),0,0)I:SP")
+    field(DTYP, "stream")
+    field(OUT,  "@mercuryitc.proto setI($(BOARD),PRES) $(PORT)")
     field(PREC, "3")
     field(EGU, "")
     info(archive, "VAL")
@@ -217,14 +191,13 @@ record(ao, "$(P)I:SP")
     field(SDIS, "$(P)DISABLE")
 }
 
-# Read LabVIEW control/indicator "D Ind" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
 record(ai, "$(P)D")
 {
     field(DESC, "D for PID controller readback")
-    field(DTYP, "asynFloat64")
-    field(INP,  "@asyn($(port),0,0)D:SP:RBV")
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getD($(BOARD),PRES) $(PORT)")
     field(PREC, "3")
-    field(SCAN, ".1 second")
+    field(SCAN, "5 second")
     field(EGU, "")
     info(archive, "VAL")
     field(SIML, "$(P)SIM")
@@ -233,12 +206,11 @@ record(ai, "$(P)D")
 }
 alias("$(P)D", "$(P)D:SP:RBV")
 
-# Write to LabVIEW control "D" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
 record(ao, "$(P)D:SP")
 {
     field(DESC, "D for PID controller")
-    field(DTYP, "asynFloat64")
-    field(OUT,  "@asyn($(port),0,0)D:SP")
+    field(DTYP, "stream")
+    field(OUT,  "@mercuryitc.proto setD($(BOARD),PRES) $(PORT)")
     field(PREC, "3")
     field(EGU, "")
     info(archive, "VAL")
@@ -247,14 +219,13 @@ record(ao, "$(P)D:SP")
     field(SDIS, "$(P)DISABLE")
 }
 
-# Read LabVIEW control/indicator "Heat Ind %" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
 record(ai, "$(P)HEATER")
 {
     field(DESC, "Heater % set point readback")
-    field(DTYP, "asynFloat64")
-    field(INP,  "@asyn($(port),0,0)HEATER:SP:RBV")
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getHtr($(BOARD),PRES) $(PORT)")
     field(PREC, "3")
-    field(SCAN, ".1 second")
+    field(SCAN, "1 second")
     field(EGU, "%")
     info(archive, "VAL")
     field(SIML, "$(P)SIM")
@@ -263,12 +234,11 @@ record(ai, "$(P)HEATER")
 }
 alias("$(P)HEATER", "$(P)HEATER:SP:RBV")
 
-# Write to LabVIEW control "Heat %" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
 record(ao, "$(P)HEATER:SP")
 {
     field(DESC, "Heater % set point")
-    field(DTYP, "asynFloat64")
-    field(OUT,  "@asyn($(port),0,0)HEATER:SP")
+    field(DTYP, "stream")
+    field(OUT,  "@mercuryitc.proto setHtr($(BOARD),PRES) $(PORT)")
     field(PREC, "3")
     field(EGU, "%")
     info(archive, "VAL")
@@ -277,12 +247,11 @@ record(ao, "$(P)HEATER:SP")
     field(SDIS, "$(P)DISABLE")
 }
 
-# Write to LabVIEW control "Voltage Limit" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
 record(ao, "$(P)HEATER:VOLT_LIMIT:SP")
 {
     field(DESC, "Voltage Limit for the heater")
-    field(DTYP, "asynFloat64")
-    field(OUT,  "@asyn($(port),0,0)HEATER:VOLT_LIMIT:SP")
+    field(DTYP, "stream")
+    field(OUT,  "@mercuryitc.proto setHtrVlim($(P)HTRCHAN) $(PORT)")
     field(PREC, "3")
     field(EGU, "V")
     info(archive, "VAL")
@@ -291,14 +260,13 @@ record(ao, "$(P)HEATER:VOLT_LIMIT:SP")
     field(SDIS, "$(P)DISABLE")
 }
 
-# Read LabVIEW control/indicator "" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
 record(ai, "$(P)HEATER:VOLT_LIMIT")
 {
     field(DESC, "Voltage Limit for the heater readback")
-    field(DTYP, "asynFloat64")
-    field(INP,  "@asyn($(port),0,0)HEATER:VOLT_LIMIT:SP:RBV")
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getHtrVlim($(P)HTRCHAN) $(PORT)")
     field(PREC, "3")
-    field(SCAN, ".1 second")
+    field(SCAN, "5 second")
     field(EGU, "V")
     info(archive, "VAL")
     field(SIML, "$(P)SIM")
@@ -307,14 +275,13 @@ record(ai, "$(P)HEATER:VOLT_LIMIT")
 }
 alias("$(P)HEATER:VOLT_LIMIT", "$(P)HEATER:VOLT_LIMIT:SP:RBV")
 
-# Read LabVIEW control/indicator "Power" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
 record(ai, "$(P)HEATER:POWER")
 {
     field(DESC, "Power used by the heater")
-    field(DTYP, "asynFloat64")
-    field(INP,  "@asyn($(port),0,0)HEATER:POWER")
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getHtrPowr($(P)HTRCHAN) $(PORT)")
     field(PREC, "3")
-    field(SCAN, ".1 second")
+    field(SCAN, "5 second")
     field(EGU, "")
     info(INTEREST, "MEDIUM")
     info(archive, "VAL")
@@ -323,98 +290,37 @@ record(ai, "$(P)HEATER:POWER")
     field(SDIS, "$(P)DISABLE")
 }
 
-# Read LabVIEW control/indicator "Voltage" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
 record(ai, "$(P)HEATER:VOLT")
 {
     field(DESC, "Voltage on the heater")
-    field(DTYP, "asynFloat64")
-    field(INP,  "@asyn($(port),0,0)HEATER:VOLT")
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getHtrVolt($(P)HTRCHAN) $(PORT)")
     field(PREC, "3")
-    field(SCAN, ".1 second")
+    field(SCAN, "5 second")
     field(EGU, "V")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:HEATER:VOLT")
     field(SDIS, "$(P)DISABLE")
 }
 
-# Read LabVIEW control/indicator "Current" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
 record(ai, "$(P)HEATER:CURR")
 {
     field(DESC, "Current on the heater")
-    field(DTYP, "asynFloat64")
-    field(INP,  "@asyn($(port),0,0)HEATER:CURR")
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getHtrCurr($(P)HTRCHAN) $(PORT)")
     field(PREC, "3")
-    field(SCAN, ".1 second")
+    field(SCAN, "5 second")
     field(EGU, "A")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:HEATER:CURR")
     field(SDIS, "$(P)DISABLE")
 }
 
-# Read LabVIEW control/indicator "Heater Control" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
-#
-# Preserved for backwards compatibility - prefer to use $(P)HEATER:MODE:SP:RBV for blocks instead.
-#
-record(mbbi, "$(P)HEATER:STAT:SP:RBV")
-{
-    field(DTYP, "asynInt32")
-    field(INP,  "@asyn($(port),0,0)HEATER:STAT:SP")
-    field(SCAN, ".1 second")
-
-    field(ZRVL, "0")
-    field(ZRST, "Automatic")
-        
-    field(ONVL, "1")
-    field(ONST, "Manual")
-    info(archive, "VAL")
-    field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:HEATER:STAT:SP:RBV")
-    field(SDIS, "$(P)DISABLE")  
-}
-
-# Write to LabVIEW control "Heater Control" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
-#
-# Preserved for backwards compatibility - prefer to use $(P)HEATER:MODE:SP for blocks instead.
-#
-record(mbbo, "$(P)HEATER:STAT:SP")
-{
-    field(DESC, "Heater Control")
-    field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(port),0,0)HEATER:STAT:SP")
-
-    field(ZRVL, "0")
-    field(ZRST, "Automatic")
-        
-    field(ONVL, "1")
-    field(ONST, "Manual")
-    info(archive, "VAL")
-    field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:HEATER:STAT:SP PP")    
-    field(SDIS, "$(P)DISABLE")
-}
-
-# Read LabVIEW control/indicator "Heater Auto" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
-#
-# Preserved for backwards compatibility - prefer to use $(P)HEATER:MODE for blocks instead.
-#
-record(bi, "$(P)HEATER:STAT")
-{
-    field(DESC, "Heater control readback")
-    field(DTYP, "asynInt32")
-    field(INP,  "@asyn($(port),0,0)HEATER:AUTO:SP:RBV")
-    field(SCAN, ".1 second")
-    # NOTE: Manual and Automatic are swapped with respect to the :SP. This is not a typo.
-    field(ZNAM, "Manual")
-    field(ONAM, "Automatic")
-    info(archive, "VAL")
-    field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:HEATER:STAT")
-    field(SDIS, "$(P)DISABLE")
-}
-
 record(bi, "$(P)HEATER:MODE") {
     field(DESC, "Heater mode readback")
-    field(INP, "$(P)HEATER:STAT CP MSS")
+    field(DTYP, "stream")
+    field(INP, "@mercuryitc.proto getHtrMode($(BOARD),PRES) $(PORT)")
+    field(SCAN, "5 second")
     field(ZNAM, "Manual")
     field(ONAM, "Auto")
     info(INTEREST, "HIGH")
@@ -425,45 +331,31 @@ record(bo, "$(P)HEATER:MODE:SP") {
     field(DESC, "Heater mode setpoint")
     field(ZNAM, "Manual")
     field(ONAM, "Auto")
-    field(OUT, "$(P)HEATER:MODE:SP:_CALC.A PP")
+    field(DTYP, "stream")
+    field(OUT, "@mercuryitc.proto setHtrMode($(BOARD),PRES) $(PORT)")
     info(archive, "VAL")
 }
 
-# Invert because $(P)HEATER:STAT:SP is the "wrong" (different) way round than expected
-record(calcout, "$(P)HEATER:MODE:SP:_CALC") {
-    field(CALC, "!A")
-    field(OUT, "$(P)HEATER:STAT:SP PP")
-}
+alias("$(P)HEATER:MODE", "$(P)HEATER:MODE:SP:RBV")
 
-record(bi, "$(P)HEATER:MODE:SP:RBV") {
-    field(DESC, "Heater mode setpoint readback")
-    field(INP, "$(P)HEATER:STAT:SP:RBV CP MSS")
-    field(ZNAM, "Manual")
-    field(ONAM, "Auto")
-    info(INTEREST, "HIGH")
-    info(archive, "VAL")
-}
-
-# Read LabVIEW control/indicator "Flow Ind %" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
 record(ai, "$(P)FLOW")
 {
     field(DESC, "Gas flow % setpoint readback'")
-    field(DTYP, "asynFloat64")
-    field(INP,  "@asyn($(port),0,0)FLOW:SP:RBV")
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getGasFlow($(P)AUXCHAN) $(PORT)")
     field(PREC, "3")
-    field(SCAN, ".1 second")
+    field(SCAN, "1 second")
     field(EGU, "%")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:FLOW")
     field(SDIS, "$(P)DISABLE")
 }
 
-# Write to LabVIEW control "Flow %" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
 record(ao, "$(P)FLOW:SP")
 {
     field(DESC, "Gas flow % setpoint")
-    field(DTYP, "asynFloat64")
-    field(OUT,  "@asyn($(port),0,0)FLOW:SP")
+    field(DTYP, "stream")
+    field(OUT,  "@mercuryitc.proto setGasFlow($(BOARD),PRES) $(PORT)")
     field(PREC, "3")
     field(EGU, "%")
     info(archive, "VAL")
@@ -473,16 +365,14 @@ record(ao, "$(P)FLOW:SP")
 }
 alias("$(P)FLOW", "$(P)FLOW:SP:RBV")
 
-# Read LabVIEW control/indicator "Flow Auto" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
 record(bi, "$(P)FLOW:STAT")
 {
     field(DESC, "Flow Auto")
-    field(DTYP, "asynInt32")
-    field(INP,  "@asyn($(port),0,0)FLOW:AUTO:SP:RBV")
-    field(SCAN, ".1 second")
-    # NOTE: Manual and Automatic are swapped with respect to the :SP. This is not a typo.
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getGasFlowMode($(BOARD),PRES) $(PORT)")
+    field(SCAN, "5 second")
     field(ZNAM, "Manual")
-    field(ONAM, "Automatic")
+    field(ONAM, "Auto")
     info(INTEREST, "HIGH")
     info(archive, "VAL")
     field(SIML, "$(P)SIM")
@@ -490,36 +380,15 @@ record(bi, "$(P)FLOW:STAT")
     field(SDIS, "$(P)DISABLE")
 }
 
-# Read LabVIEW control/indicator "Gas Control" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
-record(mbbi, "$(P)FLOW:STAT:SP:RBV")
-{
-    field(DESC, "Gas Flow Control Status readback")
-    field(DTYP, "asynInt32")
-    field(INP,  "@asyn($(port),0,0)FLOW:STAT:SP")
-    field(SCAN, ".1 second")
+alias("$(P)FLOW:STAT", "$(P)FLOW:STAT:SP:RBV")
 
-    field(ZRVL, "0")
-    field(ZRST, "Automatic")
-
-    field(ONVL, "1")
-    field(ONST, "Manual")
-    field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:FLOW:STAT:SP:RBV")
-    field(SDIS, "$(P)DISABLE")
-}
-
-# Write to LabVIEW control "Gas Control" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Pressure.llb/Mercury - Front Panel 1 - Pressure 1.vi"
-record(mbbo, "$(P)FLOW:STAT:SP")
+record(bo, "$(P)FLOW:STAT:SP")
 {
     field(DESC, "Gas Flow Control Status")
-    field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(port),0,0)FLOW:STAT:SP")
-
-    field(ZRVL, "0")
-    field(ZRST, "Automatic")
-        
-    field(ONVL, "1")
-    field(ONST, "Manual")
+    field(DTYP, "stream")
+    field(OUT,  "@mercuryitc.proto setGasFlowMode($(BOARD),PRES) $(PORT)")
+    field(ZNAM, "Manual")
+    field(ONAM, "Auto")
     info(archive, "VAL")    
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:FLOW:STAT:SP PP")
@@ -570,15 +439,15 @@ record(bo, "$(P)SIM:ACTIVITY")
     field(ONAM, "ON")
 }
 
-record(ao, "$(P)SIM:PRESSURE")
+record(ao, "$(P)SIM:TEMP")
 {
     field(SCAN, "Passive")
     field(DTYP, "Soft Channel")
 }
-alias("$(P)SIM:PRESSURE", "$(P)SIM:PRESSURE:SP")
-alias("$(P)SIM:PRESSURE", "$(P)SIM:PRESSURE:SP:RBV")
+alias("$(P)SIM:TEMP", "$(P)SIM:TEMP:SP")
+alias("$(P)SIM:TEMP", "$(P)SIM:TEMP:SP:RBV")
 
-record(ao, "$(P)SIM:VOLT")
+record(ao, "$(P)SIM:RESISTANCE")
 {
     field(SCAN, "Passive")
     field(DTYP, "Soft Channel")

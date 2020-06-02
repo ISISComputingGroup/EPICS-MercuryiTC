@@ -1,109 +1,114 @@
 Terminator = LF;
 
 getName {
-    out "READ:DEV:MB0:TEMP:NICK";
-    in "STAT:DEV:MB0:TEMP:NICK:%s";
+    out "READ:DEV:\$1:\$2:NICK";
+    in "STAT:DEV:\$1:\$2:NICK:%s";
+}
+
+getCatalog {
+    out "READ:SYS:CAT";
+    in "STAT:SYS:CAT:DEV:%1024c";
 }
 
 setName {
-    out "SET:DEV:MB0:TEMP:NICK:%s";
-    in "STAT:DEV:MB0:TEMP:NICK:%*[^:]:VALID";
+    out "SET:DEV:\$1:\$2:NICK:%s";
+    in "STAT:SET:DEV:\$1:\$2:NICK:%*[^:]:VALID";
 }
 
 getHtrChan {
-    out "READ:DEV:MB0:TEMP:LOOP:HTR";
-    in "STAT:DEV:MB0:TEMP:LOOP:HTR:%s";
+    out "READ:DEV:\$1:\$2:LOOP:HTR";
+    in "STAT:DEV:\$1:\$2:LOOP:HTR:%s";
 }
 
 getAuxChan {
-    out "READ:DEV:MB0:TEMP:LOOP:AUX";
-    in "STAT:DEV:MB0:TEMP:LOOP:AUX:%s";
+    out "READ:DEV:\$1:\$2:LOOP:AUX";
+    in "STAT:DEV:\$1:\$2:LOOP:AUX:%s";
 }
 
 # PID parameters
 
 getAutoPid {
-    out "READ:DEV:MB0:TEMP:LOOP:PIDT";
-    in "STAT:DEV:MB0:TEMP:LOOP:PIDT:%{OFF|ON}";
+    out "READ:DEV:\$1:\$2:LOOP:PIDT";
+    in "STAT:DEV:\$1:\$2:LOOP:PIDT:%{OFF|ON}";
 }
 
 setAutoPid {
-    out "SET:DEV:MB0:TEMP:LOOP:PIDT:%{OFF|ON}";
-    in "STAT:SET:DEV:MB0:TEMP:LOOP:PIDT:%*{OFF|ON}:VALID";
+    out "SET:DEV:\$1:\$2:LOOP:PIDT:%{OFF|ON}";
+    in "STAT:SET:DEV:\$1:\$2:LOOP:PIDT:%*{OFF|ON}:VALID";
 }
 
 getP {
-    out "READ:DEV:MB0:TEMP:LOOP:P";
-    in "STAT:DEV:MB0:TEMP:LOOP:P:%f";
+    out "READ:DEV:\$1:\$2:LOOP:P";
+    in "STAT:DEV:\$1:\$2:LOOP:P:%f";
 }
 
 setP {
-    out "SET:DEV:MB0:TEMP:LOOP:P:%f";
-    in "STAT:SET:DEV:MB0:TEMP:LOOP:P:%*f:VALID";
+    out "SET:DEV:\$1:\$2:LOOP:P:%f";
+    in "STAT:SET:DEV:\$1:\$2:LOOP:P:%*f:VALID";
 }
 
 getI {
-    out "READ:DEV:MB0:TEMP:LOOP:I";
-    in "STAT:DEV:MB0:TEMP:LOOP:I:%f";
+    out "READ:DEV:\$1:\$2:LOOP:I";
+    in "STAT:DEV:\$1:\$2:LOOP:I:%f";
 }
 
 setI {
-    out "SET:DEV:MB0:TEMP:LOOP:I:%f";
-    in "STAT:SET:DEV:MB0:TEMP:LOOP:I:%*f:VALID";
+    out "SET:DEV:\$1:\$2:LOOP:I:%f";
+    in "STAT:SET:DEV:\$1:\$2:LOOP:I:%*f:VALID";
 }
 
 getD {
-    out "READ:DEV:MB0:TEMP:LOOP:D";
-    in "STAT:DEV:MB0:TEMP:LOOP:D:%f";
+    out "READ:DEV:\$1:\$2:LOOP:D";
+    in "STAT:DEV:\$1:\$2:LOOP:D:%f";
 }
 
 setD {
-    out "SET:DEV:MB0:TEMP:LOOP:D:%f";
-    in "STAT:SET:DEV:MB0:TEMP:LOOP:D:%*f:VALID";
+    out "SET:DEV:\$1:\$2:LOOP:D:%f";
+    in "STAT:SET:DEV:\$1:\$2:LOOP:D:%*f:VALID";
 }
 
 # Temperatures
 
 getTemp {
-    out "READ:DEV:MB0:TEMP:SIG:TEMP";
-    in "STAT:DEV:MB0:TEMP:SIG:TEMP:%fK";
+    out "READ:DEV:\$1:\$2:SIG:TEMP";
+    in "STAT:DEV:\$1:\$2:SIG:TEMP:%fK";
 }
 
 getTempSp {
-    out "READ:DEV:MB0:TEMP:LOOP:TSET";
-    in "STAT:DEV:MB0:TEMP:LOOP:TSET:%fK";
+    out "READ:DEV:\$1:\$2:LOOP:TSET";
+    in "STAT:DEV:\$1:\$2:LOOP:TSET:%fK";
 }
 
 setTempSp {
-    out "SET:DEV:MB0:TEMP:LOOP:TSET:%fK";
-    in "STAT:SET:DEV:MB0:TEMP:LOOP:TSET:%fK:VALID";
+    out "SET:DEV:\$1:\$2:LOOP:TSET:%fK";
+    in "STAT:SET:DEV:\$1:\$2:LOOP:TSET:%fK:VALID";
 }
 
 getRes {
-    out "READ:DEV:MB0:TEMP:SIG:RES";
-    in "STAT:DEV:MB0:TEMP:SIG:RES:%fO";
+    out "READ:DEV:\$1:\$2:SIG:RES";
+    in "STAT:DEV:\$1:\$2:SIG:RES:%fO";
 }
 
 # Heater
 
 getHtrMode {
-    out "READ:DEV:MB0:TEMP:LOOP:ENAB";
-    in "STAT:DEV:MB0:TEMP:LOOP:ENAB:%{OFF|ON}";
+    out "READ:DEV:\$1:\$2:LOOP:ENAB";
+    in "STAT:DEV:\$1:\$2:LOOP:ENAB:%{OFF|ON}";
 }
 
 setHtrMode {
-    out "SET:DEV:MB0:TEMP:LOOP:ENAB:%{OFF|ON}";
-    in "STAT:SET:DEV:MB0:TEMP:LOOP:ENAB:%*{OFF|ON}:VALID";
+    out "SET:DEV:\$1:\$2:LOOP:ENAB:%{OFF|ON}";
+    in "STAT:SET:DEV:\$1:\$2:LOOP:ENAB:%*{OFF|ON}:VALID";
 }
 
 getHtr {
-    out "READ:DEV:MB0:TEMP:LOOP:HSET";
-    in "STAT:DEV:MB0:TEMP:LOOP:HSET:%f";
+    out "READ:DEV:\$1:\$2:LOOP:HSET";
+    in "STAT:DEV:\$1:\$2:LOOP:HSET:%f";
 }
 
 setHtr {
-    out "SET:DEV:MB0:TEMP:LOOP:HSET:%f";
-    in "STAT:SET:DEV:MB0:TEMP:LOOP:HSET:%*f:VALID";
+    out "SET:DEV:\$1:\$2:LOOP:HSET:%f";
+    in "STAT:SET:DEV:\$1:\$2:LOOP:HSET:%*f:VALID";
 }
 
 getHtrVolt {
@@ -134,13 +139,13 @@ setHtrVlim {
 # Gas flow
 
 getGasFlowMode {
-    out "READ:DEV:MB0:TEMP:LOOP:FAUT";
-    in "STAT:DEV:MB0:TEMP:LOOP:FAUT:%{OFF|ON}";
+    out "READ:DEV:\$1:\$2:LOOP:FAUT";
+    in "STAT:DEV:\$1:\$2:LOOP:FAUT:%{OFF|ON}";
 }
 
 setGasFlowMode {
-    out "SET:DEV:MB0:TEMP:LOOP:FAUT:%{OFF|ON}";
-    in "STAT:SET:DEV:MB0:TEMP:LOOP:FAUT:%*{OFF|ON}:VALID";
+    out "SET:DEV:\$1:\$2:LOOP:FAUT:%{OFF|ON}";
+    in "STAT:SET:DEV:\$1:\$2:LOOP:FAUT:%*{OFF|ON}:VALID";
 }
 
 getGasFlow {
@@ -149,6 +154,6 @@ getGasFlow {
 }
 
 setGasFlow {
-    out "SET:DEV:MB0:TEMP:LOOP:FSET:%f";
-    in "STAT:SET:DEV:MB0:TEMP:LOOP:FSET:%*f:VALID";
+    out "SET:DEV:\$1:\$2:LOOP:FSET:%f";
+    in "STAT:SET:DEV:\$1:\$2:LOOP:FSET:%*f:VALID";
 }
