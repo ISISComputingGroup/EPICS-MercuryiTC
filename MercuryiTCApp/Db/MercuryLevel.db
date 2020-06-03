@@ -1,31 +1,13 @@
-
-# Initially auto-generated
-# 
-
-# 
-# Definitions from configSection "frontpanel" in XML input file
-#
-#     lvDCOMConfigure("$(port)", "frontpanel", "/path/to/lvinput.xml")
-# 
 # MACROS for IOC
 # P - base name of the IOC including IOC number and panel number
-# IOC_NUM - the ioc's number sets the first panel number (e.g. Mercury - Front Panel $(IOC_NUM) - LEVEL $(VI_LEVEL_X)
-# VI_LEVEL_1 - the first level panel number (usually 1 or blank for do not use)
-# VI_LEVEL_2 - the first level panel number (usually 2 or blank for do not use)
-# VI_LEVEL_3 - the first level panel number (usually 3 or blank for do not use)
-# VI_LEVEL_4 - the first level panel number (usually 4 or blank for do not use)
-      
-## Creating both stringout/stringin and waveform records for "Name" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Level.llb/Mercury - Front Panel 1 - Level 1.vi"
-## EPICS strings are restricted to 40 characters in length, if your strings are
-## longer than this choose the character waveform records and adjust NELM if necessary
+# BOARD - the mercury control board that this DB is looking at (e.g. MB0)
 
-# Read LabVIEW control/indicator "Name" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Level.llb/Mercury - Front Panel 1 - Level 1.vi"
 record(stringin, "$(P)NAME")
 {
     field(DESC, "Name")
-    field(DTYP, "asynOctetRead")
-    field(INP,  "@asyn($(port),0,0)NAME")
-    field(SCAN, ".1 second")
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getName($(BOARD),LVL) $(PORT)")
+    field(SCAN, "10 second")
     info(INTEREST, "MEDIUM")
     info(archive, "VAL")
     field(SIML, "$(P)SIM")
@@ -34,43 +16,24 @@ record(stringin, "$(P)NAME")
 }
 alias( "$(P)NAME",  "$(P)NAME:SP:RBV")
 
-# Write to LabVIEW control "Name" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Level.llb/Mercury - Front Panel 1 - Level 1.vi"
 record(stringout, "$(P)NAME:SP")
 {
     field(DESC, "Set the name")
-    field(DTYP, "asynOctetWrite")
-    #NOTE: This does push the value to the real thing, with some asyn magic
-    # but in SIM mode it doesn't push its value, it pulls it from the SIM:NAME instead
-    # (as waveforms are really input records)
-    field(OUT,  "@asyn($(port),0,0)NAME")
+    field(DTYP, "stream")
+    field(OUT,  "@mercuryitc.proto setName($(BOARD),LVL) $(PORT)")
     info(archive, "VAL")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:NAME:SP")
     field(SDIS, "$(P)DISABLE")
 }
 
-# Read LabVIEW control/indicator "Activity" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Level.llb/Mercury - Front Panel 1 - Level 1.vi"
-record(bi, "$(P)ACTIVITY")
-{
-    field(DESC, "Activity")
-    field(DTYP, "asynInt32")
-    field(INP,  "@asyn($(port),0,0)ACTIVITY")
-    field(SCAN, ".1 second")
-    field(ZNAM, "OFF")
-    field(ONAM, "ON")
-    field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:ACTIVITY")
-    field(SDIS, "$(P)DISABLE")
-}
-
-# Read LabVIEW control/indicator "He Level" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Level.llb/Mercury - Front Panel 1 - Level 1.vi"
 record(ai, "$(P)HELIUM")
 {
     field(DESC, "Helium level")
-    field(DTYP, "asynFloat64")
-    field(INP,  "@asyn($(port),0,0)HELIUM")
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getHeLvl($(BOARD),PRES) $(PORT)")
     field(PREC, "3")
-    field(SCAN, ".1 second")
+    field(SCAN, "5 second")
     field(EGU, "%")
     info(INTEREST, "HIGH")
     info(archive, "VAL")
@@ -79,14 +42,13 @@ record(ai, "$(P)HELIUM")
     field(SDIS, "$(P)DISABLE")
 }
 
-# Read LabVIEW control/indicator "N2 Level" on "C:/LabVIEW Modules/Drivers/Oxford Instruments/Mercury/Mercury - Level.llb/Mercury - Front Panel 1 - Level 1.vi"
 record(ai, "$(P)NITROGEN")
 {
     field(DESC, "Nitrogen level")
-    field(DTYP, "asynFloat64")
-    field(INP,  "@asyn($(port),0,0)NITROGEN")
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getNLvl($(BOARD),PRES) $(PORT)")
     field(PREC, "3")
-    field(SCAN, ".1 second")
+    field(SCAN, "5 second")
     field(EGU, "%")
     info(INTEREST, "HIGH")
     info(archive, "VAL")

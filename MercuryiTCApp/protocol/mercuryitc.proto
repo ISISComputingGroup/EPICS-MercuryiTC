@@ -189,3 +189,15 @@ setGasFlow {
     out "SET:DEV:\$1:\$2:LOOP:FSET:%f";
     in "STAT:SET:DEV:\$1:\$2:LOOP:FSET:%*f:VALID";
 }
+
+# Gas levels
+
+getHeLvl {
+    out "READ:DEV:\$1:LVL:SIG:HEL:LEV";
+    in "STAT:DEV:\$1:LVL:SIG:HEL:LEV:%f\%";
+}
+
+getNLvl {
+    out "READ:DEV:\$1:LVL:SIG:NIT:LEV";
+    in "STAT:DEV:\$1:LVL:SIG:NIT:LEV:%f\%";
+}
