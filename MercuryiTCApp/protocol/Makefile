@@ -3,9 +3,6 @@ include $(TOP)/configure/CONFIG
 #----------------------------------------
 #  ADD MACRO DEFINITIONS AFTER THIS LINE
 
-DATA += lv_MercuryTemp.xml
-DATA += lv_MercuryLevel.xml
-DATA += lv_MercuryPressure.xml
 DATA += mercuryitc.proto
 
 #----------------------------------------------------

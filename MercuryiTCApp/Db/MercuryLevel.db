@@ -57,6 +57,35 @@ record(ai, "$(P)NITROGEN")
     field(SDIS, "$(P)DISABLE")
 }
 
+record(bi, "$(P)HELIUM:READ_RATE")
+{
+    field(DESC, "Helium read rate")
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getHeReadRate($(BOARD)) $(PORT)")
+    field(SCAN, "5 second")
+    field(ZNAM, "Slow")
+    field(ONAM, "Fast")
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:HELIUM:READ_RATE")
+    field(SDIS, "$(P)DISABLE")
+}
+alias("$(P)HELIUM:READ_RATE", "$(P)HELIUM:READ_RATE:SP:RBV")
+
+record(bo, "$(P)HELIUM:READ_RATE:SP")
+{
+    field(DESC, "Helium read rate")
+    field(DTYP, "stream")
+    field(OUT,  "@mercuryitc.proto setHeReadRate($(BOARD)) $(PORT)")
+    info(archive, "VAL")
+    field(ZNAM, "Slow")
+    field(ONAM, "Fast")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:HELIUM:READ_RATE:SP")
+    field(SDIS, "$(P)DISABLE")
+}
+
 ####################
 ## DISABLE RECORD ##
 ####################
@@ -65,7 +94,7 @@ record(bo, "$(P)DISABLE")
 {
     field(DESC, "Disable comms")
     field(PINI, "YES")
-    field(VAL, "0")
+    field(VAL, "$(DISABLE)")
     field(OMSL, "supervisory")
     field(ZNAM, "COMMS ENABLED")
     field(ONAM, "COMMS DISABLED")
@@ -81,25 +110,15 @@ record(bo, "$(P)SIM")
     field(DTYP, "Soft Channel")
     field(ZNAM, "NO")
     field(ONAM, "YES")
+    field(PINI, "YES")
+    field(VAL, "$(RECSIM)")
 }
 
-record(waveform, "$(P)SIM:NAME")
+record(stringout, "$(P)SIM:NAME")
 {
-    field(SCAN, "Passive")
-    field(DTYP, "Soft Channel")
-    field(FTVL, "CHAR")
-    field(NELM, "256")
 }
 alias("$(P)SIM:NAME", "$(P)SIM:NAME:SP")
 alias("$(P)SIM:NAME", "$(P)SIM:NAME:SP:RBV")
-
-record(bo, "$(P)SIM:ACTIVITY")
-{
-    field(SCAN, "Passive")
-    field(DTYP, "Soft Channel")
-    field(ZNAM, "OFF")
-    field(ONAM, "ON")
-}
 
 record(ao, "$(P)SIM:HELIUM")
 {
@@ -112,3 +131,6 @@ record(ao, "$(P)SIM:NITROGEN")
     field(SCAN, "Passive")
     field(DTYP, "Soft Channel")
 }
+
+record(bo, "$(P)SIM:HELIUM:READ_RATE"){}
+alias("$(P)SIM:HELIUM:READ_RATE", "$(P)SIM:HELIUM:READ_RATE:SP")

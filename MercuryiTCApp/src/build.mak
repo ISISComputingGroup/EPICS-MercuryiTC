@@ -12,6 +12,7 @@ include $(TOP)/configure/CONFIG
 # We actually use $(APPNAME) below so this file can be included by multiple IOCs
 
 PROD_IOC = $(APPNAME)
+LIBRARY_IOC = $(APPNAME)
 # MercuryiTC.dbd will be created and installed
 DBD += $(APPNAME).dbd
 
@@ -26,7 +27,7 @@ $(APPNAME)_DBD += caPutLog.dbd
 $(APPNAME)_DBD += utilities.dbd
 $(APPNAME)_DBD += asyn.dbd
 ## add other dbd here ##
-$(APPNAME)_DBD += lvDCOM.dbd
+$(APPNAME)_DBD += parse_catalog.dbd
 
 # Add all the support libraries needed by this IOC
 ## ISIS standard libraries ##
@@ -37,13 +38,13 @@ $(APPNAME)_LIBS += caPutLog
 $(APPNAME)_LIBS += icpconfig pugixml
 $(APPNAME)_LIBS += autosave
 ## Add other libraries here ##
-$(APPNAME)_LIBS += lvDCOM 
 $(APPNAME)_LIBS += asyn 
-$(APPNAME)_LIBS += utilities pcrecpp pcre libjson zlib
+$(APPNAME)_LIBS += utilities pcrecpp pcre libjson zlib asubFunctions
 
 
 # MercuryiTC_registerRecordDeviceDriver.cpp derives from MercuryiTC.dbd
 $(APPNAME)_SRCS += $(APPNAME)_registerRecordDeviceDriver.cpp
+$(APPNAME)_SRCS += parse_catalog.c
 
 # Build the main IOC entry point on workstation OSs.
 $(APPNAME)_SRCS_DEFAULT += $(APPNAME)Main.cpp

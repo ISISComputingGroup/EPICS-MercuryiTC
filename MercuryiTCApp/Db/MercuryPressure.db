@@ -36,6 +36,25 @@ record(stringin, "$(P)HTRCHAN") {
     
     info(INTEREST, "HIGH")
     info(archive, "VAL")
+    
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:HTRCHAN")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(stringout, "$(P)HTRCHAN:SP") {
+    field(DESC, "The HTR channel for this sensor")
+    field(DTYP, "stream")
+    field(OUT,  "@mercuryitc.proto setHtrChan($(BOARD),PRES) $(PORT)")
+    
+    field(ASG, "MANAGER")  # Restrict to manager-mode access only.
+    
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+    
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:HTRCHAN")
+    field(SDIS, "$(P)DISABLE")
 }
 
 record(stringin, "$(P)AUXCHAN") {
@@ -47,6 +66,55 @@ record(stringin, "$(P)AUXCHAN") {
     
     info(INTEREST, "HIGH")
     info(archive, "VAL")
+    
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:AUXCHAN")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(stringout, "$(P)AUXCHAN:SP") {
+    field(DESC, "The AUX channel for this sensor")
+    field(DTYP, "stream")
+    field(OUT,  "@mercuryitc.proto setAuxChan($(BOARD),PRES) $(PORT)")
+    
+    field(ASG, "MANAGER")  # Restrict to manager-mode access only.
+    
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+    
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:AUXCHAN")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(stringin, "$(P)CALFILE") {
+    field(DESC, "The calib. file for this sensor")
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getCalFile($(BOARD),PRES) $(PORT)")
+    field(SCAN, "5 second")
+    field(PINI, "YES")
+    
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+    
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:CALFILE")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(stringout, "$(P)CALFILE:SP") {
+    field(DESC, "The calib. file for this sensor")
+    field(DTYP, "stream")
+    field(OUT,  "@mercuryitc.proto setCalFile($(BOARD),PRES) $(PORT)")
+    
+    field(ASG, "MANAGER")
+    
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+    
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:CALFILE")
+    field(SDIS, "$(P)DISABLE")
 }
 
 record(ai, "$(P)PRESSURE")
@@ -325,6 +393,10 @@ record(bi, "$(P)HEATER:MODE") {
     field(ONAM, "Auto")
     info(INTEREST, "HIGH")
     info(archive, "VAL")
+    
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:HEATER:MODE")
+    field(SDIS, "$(P)DISABLE")
 }
 
 record(bo, "$(P)HEATER:MODE:SP") {
@@ -334,6 +406,11 @@ record(bo, "$(P)HEATER:MODE:SP") {
     field(DTYP, "stream")
     field(OUT, "@mercuryitc.proto setHtrMode($(BOARD),PRES) $(PORT)")
     info(archive, "VAL")
+    
+    
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:HEATER:MODE:SP")
+    field(SDIS, "$(P)DISABLE")
 }
 
 alias("$(P)HEATER:MODE", "$(P)HEATER:MODE:SP:RBV")
@@ -403,7 +480,7 @@ record(bo, "$(P)DISABLE")
 {
     field(DESC, "Disable comms")
     field(PINI, "YES")
-    field(VAL, "0")
+    field(VAL, "$(DISABLE)")
     field(OMSL, "supervisory")
     field(ZNAM, "COMMS ENABLED")
     field(ONAM, "COMMS DISABLED")
@@ -419,25 +496,15 @@ record(bo, "$(P)SIM")
     field(DTYP, "Soft Channel")
     field(ZNAM, "NO")
     field(ONAM, "YES")
+    field(PINI, "YES")
+    field(VAL, "$(RECSIM)")
 }
 
-record(waveform, "$(P)SIM:NAME")
+record(stringout, "$(P)SIM:NAME")
 {
-    field(SCAN, "Passive")
-    field(DTYP, "Soft Channel")
-    field(FTVL, "CHAR")
-    field(NELM, "256")
 }
 alias("$(P)SIM:NAME", "$(P)SIM:NAME:SP")
 alias("$(P)SIM:NAME", "$(P)SIM:NAME:SP:RBV")
-
-record(bo, "$(P)SIM:ACTIVITY")
-{
-    field(SCAN, "Passive")
-    field(DTYP, "Soft Channel")
-    field(ZNAM, "OFF")
-    field(ONAM, "ON")
-}
 
 record(ao, "$(P)SIM:TEMP")
 {
@@ -447,7 +514,7 @@ record(ao, "$(P)SIM:TEMP")
 alias("$(P)SIM:TEMP", "$(P)SIM:TEMP:SP")
 alias("$(P)SIM:TEMP", "$(P)SIM:TEMP:SP:RBV")
 
-record(ao, "$(P)SIM:RESISTANCE")
+record(ao, "$(P)SIM:VOLT")
 {
     field(SCAN, "Passive")
     field(DTYP, "Soft Channel")
@@ -527,29 +594,15 @@ record(ao, "$(P)SIM:HEATER:CURR")
     field(DTYP, "Soft Channel")
 }
 
-record(bo, "$(P)SIM:HEATER:STAT")
+record(bo, "$(P)SIM:HEATER:MODE")
 {
     field(SCAN, "Passive")
     field(DTYP, "Soft Channel")
     field(ZNAM, "Manual")
-    field(ONAM, "Automatic")
+    field(ONAM, "Auto")
 }
 
-record(bo, "$(P)SIM:HEATER:STAT:SP")
-{
-    field(SCAN, "Passive")
-    field(DTYP, "Soft Channel")
-    field(ZNAM, "Automatic")
-    field(ONAM, "Manual")
-    field(OUT, "$(P)SIM:HEATER:STAT:CALC.A PP")
-}
-alias("$(P)SIM:HEATER:STAT:SP", "$(P)SIM:HEATER:STAT:SP:RBV")
-
-record(calcout, "$(P)SIM:HEATER:STAT:CALC")
-{
-    field(CALC, "!A")
-    field(OUT, "$(P)SIM:HEATER:STAT PP")
-}
+alias("$(P)SIM:HEATER:MODE", "$(P)SIM:HEATER:MODE:SP")
 
 record(ao, "$(P)SIM:FLOW")
 {
@@ -567,14 +620,7 @@ record(bo, "$(P)SIM:FLOW:STAT")
     field(ONAM, "Automatic")
 }
 
-record(bo, "$(P)SIM:FLOW:STAT:SP")
-{
-    field(SCAN, "Passive")
-    field(DTYP, "Soft Channel")
-    field(ZNAM, "Automatic")
-    field(ONAM, "Manual")
-    field(OUT, "$(P)SIM:FLOW:STAT:CALC.A PP")
-}
+alias("$(P)SIM:FLOW:STAT", "$(P)SIM:FLOW:STAT:SP")
 alias("$(P)SIM:FLOW:STAT:SP", "$(P)SIM:FLOW:STAT:SP:RBV")
 
 record(calcout, "$(P)SIM:FLOW:STAT:CALC")
@@ -594,3 +640,7 @@ record(ao, "$(P)SIM:NITROGEN")
     field(SCAN, "Passive")
     field(DTYP, "Soft Channel")
 }
+
+record(stringout, "$(P)SIM:AUXCHAN") {}
+record(stringout, "$(P)SIM:HTRCHAN") {}
+record(stringout, "$(P)SIM:CALFILE") {}

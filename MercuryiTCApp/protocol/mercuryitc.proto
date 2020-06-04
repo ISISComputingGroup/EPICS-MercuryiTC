@@ -4,7 +4,7 @@ Terminator = LF;
 
 getCatalog {
     out "READ:SYS:CAT";
-    in "STAT:SYS:CAT:DEV:%1024c";
+    in "STAT:SYS:CAT:%1024c";
 }
 
 # Channel metadata
@@ -24,9 +24,31 @@ getHtrChan {
     in "STAT:DEV:\$1:\$2:LOOP:HTR:%s";
 }
 
+setHtrChan {
+    out "SET:DEV:\$1:\$2:LOOP:HTR:%s";
+    in "STAT:SET:DEV:\$1:\$2:LOOP:HTR:%*[^:]:VALID";
+}
+
 getAuxChan {
     out "READ:DEV:\$1:\$2:LOOP:AUX";
     in "STAT:DEV:\$1:\$2:LOOP:AUX:%s";
+}
+
+setAuxChan {
+    out "SET:DEV:\$1:\$2:LOOP:AUX:%s";
+    in "STAT:SET:DEV:\$1:\$2:LOOP:AUX:%*[^:]:VALID";
+}
+
+# Calibration files
+
+getCalFile {
+    out "READ:DEV:\$1:\$2:CAL:FILE";
+    in "STAT:DEV:\$1:\$2:CAL:FILE:%s";
+}
+
+setCalFile {
+    out "SET:DEV:\$1:\$2:CAL:FILE:%s";
+    in "STAT:SET:DEV:\$1:\$2:CAL:FILE:%*[^:]:VALID";
 }
 
 # PID parameters
@@ -200,4 +222,14 @@ getHeLvl {
 getNLvl {
     out "READ:DEV:\$1:LVL:SIG:NIT:LEV";
     in "STAT:DEV:\$1:LVL:SIG:NIT:LEV:%f\%";
+}
+
+getHeReadRate {
+    out "READ:DEV:\$1:LVL:HEL:PULS:SLOW";
+    in "STAT:DEV:\$1:LVL:HEL:PULS:SLOW:%{ON|OFF}";
+}
+
+setHeReadRate {
+    out "SET:DEV:\$1:LVL:HEL:PULS:SLOW:%{1|0}";
+    in "STAT:SET:DEV:\$1:LVL:HEL:PULS:SLOW:%*{ON|0|OFF|1}:VALID";
 }

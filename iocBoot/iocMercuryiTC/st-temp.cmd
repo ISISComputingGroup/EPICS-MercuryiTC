@@ -4,7 +4,4 @@
 stringiftest("TEMP", "$(TEMP_$(TEMP_NUM)=)")
 
 ## Load our record instances
-$(IFTEMP) dbLoadRecords("db/MercuryTemp.db", "P=$(MYPVPREFIX)$(IOCNAME):$(TEMP_NUM):,PORT=L0,BOARD=$(TEMP_$(TEMP_NUM))")
-
-$(IFTEMP) epicsEnvSet(SIM$(TEMP_NUM), $(MYPVPREFIX)$(IOCNAME):$(TEMP_NUM):SIM)
-$(IFTEMP) epicsEnvSet(DISABLE$(TEMP_NUM), $(MYPVPREFIX)$(IOCNAME):$(TEMP_NUM):DISABLE)
+$(IFTEMP) dbLoadRecords("db/MercuryTemp.db", "P=$(MYPVPREFIX)$(IOCNAME):$(TEMP_NUM):,PORT=L0,BOARD=$(TEMP_$(TEMP_NUM)),RECSIM=$(RECSIM),DISABLE=$(DISABLE)")

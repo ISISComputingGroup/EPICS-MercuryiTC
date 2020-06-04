@@ -4,7 +4,4 @@
 stringiftest("LEVEL", "$(LEVEL_$(LEVEL_NUM)=)")
 
 ## Load our record instances
-$(IFLEVEL) dbLoadRecords("db/MercuryLevel.db", "P=$(MYPVPREFIX)$(IOCNAME):LEVEL:$(LEVEL_NUM):,PORT=L0,BOARD=$(LEVEL_$(LEVEL_NUM))")
-
-$(IFLEVEL) epicsEnvSet(SIM$(PORT_NUM), $(MYPVPREFIX)$(IOCNAME):$(PORT_NUM):SIM)
-$(IFLEVEL) epicsEnvSet(DISABLE$(PORT_NUM), $(MYPVPREFIX)$(IOCNAME):$(PORT_NUM):DISABLE)
+$(IFLEVEL) dbLoadRecords("db/MercuryLevel.db", "P=$(MYPVPREFIX)$(IOCNAME):LEVEL:$(LEVEL_NUM):,PORT=L0,BOARD=$(LEVEL_$(LEVEL_NUM)),RECSIM=$(RECSIM),DISABLE=$(DISABLE)")
