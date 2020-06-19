@@ -3,24 +3,27 @@
 #include <aSubRecord.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <menuFtype.h>
 #include <errlog.h>
 #include <epicsString.h>
+
+#define MAX_DEVICES 64
 
 
 static long parse_catalog(aSubRecord *prec) {
 
 	char* input = (char*)(prec->a);
     
-    epicsOldString temp_devices[64];
+    epicsOldString temp_devices[MAX_DEVICES];
     int assigned_temp_devices = 0;
-    epicsOldString pres_devices[64];
+    epicsOldString pres_devices[MAX_DEVICES];
     int assigned_pres_devices = 0;
-    epicsOldString aux_devices[64];
+    epicsOldString aux_devices[MAX_DEVICES];
     int assigned_aux_devices = 0;
-    epicsOldString htr_devices[64];
+    epicsOldString htr_devices[MAX_DEVICES];
     int assigned_htr_devices = 0;
-    epicsOldString lvl_devices[64];
+    epicsOldString lvl_devices[MAX_DEVICES];
     int assigned_lvl_devices = 0;
     
     char* strtok_saveptr;
@@ -71,23 +74,42 @@ static long parse_catalog(aSubRecord *prec) {
             return 1;
         }
         
+        if (assigned_temp_devices >= MAX_DEVICES 
+            || assigned_pres_devices >= MAX_DEVICES 
+            || assigned_aux_devices >= MAX_DEVICES 
+            || assigned_htr_devices >= MAX_DEVICES 
+            || assigned_lvl_devices >= MAX_DEVICES) 
+        {
+            errlogSevPrintf(errlogMajor, "parse_catalog: too many devices");
+            return 1;
+        }
+        
         dev_string = epicsStrtok_r(NULL, ":", &strtok_saveptr);
     }
     
-    
-    (epicsOldString*)(prec->vala) = temp_devices;
+    for (int i = 0; i < assigned_temp_devices; i++) {
+        strncpy(((epicsOldString*)(prec->vala))[i], temp_devices[i], MAX_STRING_SIZE);
+    }
     (long)(prec->neva) = assigned_temp_devices;
     
-    (epicsOldString*)(prec->valb) = pres_devices;
+    for (int i = 0; i < assigned_pres_devices; i++) {
+        strncpy(((epicsOldString*)(prec->valb))[i], pres_devices[i], MAX_STRING_SIZE);
+    }
     (long)(prec->nevb) = assigned_pres_devices;
     
-    (epicsOldString*)(prec->valc) = lvl_devices;
+    for (int i = 0; i < assigned_lvl_devices; i++) {
+        strncpy(((epicsOldString*)(prec->valc))[i], lvl_devices[i], MAX_STRING_SIZE);
+    }
     (long)(prec->nevc) = assigned_lvl_devices;
     
-    (epicsOldString*)(prec->vald) = htr_devices;
+    for (int i = 0; i < assigned_htr_devices; i++) {
+        strncpy(((epicsOldString*)(prec->vald))[i], htr_devices[i], MAX_STRING_SIZE);
+    }
     (long)(prec->nevd) = assigned_htr_devices;
     
-    (epicsOldString*)(prec->vale) = aux_devices;
+    for (int i = 0; i < assigned_aux_devices; i++) {
+        strncpy(((epicsOldString*)(prec->vale))[i], aux_devices[i], MAX_STRING_SIZE);
+    }
     (long)(prec->neve) = assigned_aux_devices;
 	
 
