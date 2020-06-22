@@ -124,9 +124,10 @@ getPresSp {
 }
 
 setPresSp {
-    # NOTE: despite reading pressure this still looks at TSET for the control loop.
-    out "SET:DEV:\$1:\$2:LOOP:TSET:%fmBar";
-    in "STAT:SET:DEV:\$1:\$2:LOOP:TSET:%fmBar:VALID";
+    # This is intentionally assymetric with getPresSp - the device requires sending PRST but
+    # internally uses TSET and this is what we have to query on a read.
+    out "SET:DEV:\$1:\$2:LOOP:PRST:%fmBar";
+    in "STAT:SET:DEV:\$1:\$2:LOOP:PRST:%fmBar:VALID";
 }
 
 # Raw sensor readings
