@@ -2,22 +2,10 @@ record(bo, "$(P)DISABLE")
 {
     field(DESC, "Disable comms")
     field(PINI, "YES")
-    field(VAL, "0")
+    field(VAL, "$(DISABLE)")
     field(OMSL, "supervisory")
     field(ZNAM, "COMMS ENABLED")
     field(ONAM, "COMMS DISABLED")
-}
-
-record(dfanout, "$(P)DIS:FAN")
-{
-	field(DOL, "$(P)DISABLE CP")
-	field(OMSL, "closed_loop")
-	field(OUTA, "$(DISABLE1)")
-	field(OUTB, "$(DISABLE2)")
-	field(OUTC, "$(DISABLE3)")
-	field(OUTD, "$(DISABLE4)")
-	field(OUTE, "$(DISABLE5)")
-	field(OUTF, "$(DISABLE6)")
 }
 
 record(bo, "$(P)SIM")
@@ -26,16 +14,54 @@ record(bo, "$(P)SIM")
     field(DTYP, "Soft Channel")
     field(ZNAM, "NO")
     field(ONAM, "YES")
+    field(PINI, "YES")
+    field(VAL, "$(RECSIM)")
 }
 
-record(dfanout, "$(P)SIM:FAN")
+record(waveform, "$(P)CATALOG:_RAW")
 {
-	field(DOL, "$(P)SIM CP")
-	field(OMSL, "closed_loop")
-	field(OUTA, "$(SIM1)")
-	field(OUTB, "$(SIM2)")
-	field(OUTC, "$(SIM3)")
-	field(OUTD, "$(SIM4)")
-	field(OUTE, "$(SIM5)")
-	field(OUTF, "$(SIM6)")
+    field(DESC, "Name")
+    field(DTYP, "stream")
+    field(INP,  "@mercuryitc.proto getCatalog $(PORT)")
+    field(NELM, "1024")
+    field(FTVL, "CHAR")
+    field(SCAN, "10 second")
+    field(PINI, "YES")
+    info(archive, "VAL")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:CATALOG:_RAW")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(aSub, "$(P)CATALOG:PARSE") 
+{
+    field(SNAM, "parse_catalog")
+    field(INPA, "$(P)CATALOG:_RAW CP MS")
+    field(FTA, "CHAR")
+    field(NOA, "1024")
+      
+    # Temperature devices
+    field(FTVA, "STRING")
+    field(NOVA, "64")
+      
+    # Pressure devices
+    field(FTVB, "STRING")
+    field(NOVB, "64")
+      
+    # Level devices
+    field(FTVC, "STRING")
+    field(NOVC, "64")
+      
+    # Heater devices
+    field(FTVD, "STRING")
+    field(NOVD, "64")
+      
+    # Auxiliary devices
+    field(FTVE, "STRING")
+    field(NOVE, "64")
+}
+
+record(waveform, "$(P)SIM:CATALOG:_RAW")
+{
+    
 }
