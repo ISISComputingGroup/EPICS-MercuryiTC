@@ -135,13 +135,13 @@ setPresSp {
 getRes {
     # Resistance is only used for temperature cards
     out "READ:DEV:\$1:\$2:SIG:RES";
-    in "STAT:DEV:\$1:\$2:SIG:RES:%f%s";
+    in "STAT:DEV:\$1:\$2:SIG:RES:%f%*s";
 }
 
 getVolt {
     # Voltage is only used for pressure cards
     out "READ:DEV:\$1:\$2:SIG:VOLT";
-    in "STAT:DEV:\$1:\$2:SIG:VOLT:%f%s";
+    in "STAT:DEV:\$1:\$2:SIG:VOLT:%f%*s";
 }
 
 # Heater
