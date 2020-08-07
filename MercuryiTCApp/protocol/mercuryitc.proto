@@ -118,7 +118,6 @@ getPres {
 }
 
 getPresSp {
-    # NOTE: despite reading pressure this still looks at TSET for the control loop.
     out "READ:DEV:\$1:\$2:LOOP:PRST";
     in "STAT:DEV:\$1:\$2:LOOP:PRST:%fmB";
 }
