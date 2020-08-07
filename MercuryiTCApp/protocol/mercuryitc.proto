@@ -43,11 +43,11 @@ setAuxChan {
 
 getCalFile {
     out "READ:DEV:\$1:\$2:CAL:FILE";
-    in "STAT:DEV:\$1:\$2:CAL:FILE:%s";
+    in "STAT:DEV:\$1:\$2:CAL:FILE:%#s";
 }
 
 setCalFile {
-    out "SET:DEV:\$1:\$2:CAL:FILE:%s";
+    out "SET:DEV:\$1:\$2:CAL:FILE:%#s";
     in "STAT:SET:DEV:\$1:\$2:CAL:FILE:%*[^:]:VALID";
 }
 
@@ -114,20 +114,19 @@ setTempSp {
 
 getPres {
     out "READ:DEV:\$1:\$2:SIG:PRES";
-    in "STAT:DEV:\$1:\$2:SIG:PRES:%fmBar";
+    in "STAT:DEV:\$1:\$2:SIG:PRES:%fmB";
 }
 
 getPresSp {
-    # NOTE: despite reading pressure this still looks at TSET for the control loop.
-    out "READ:DEV:\$1:\$2:LOOP:TSET";
-    in "STAT:DEV:\$1:\$2:LOOP:TSET:%fmBar";
+    out "READ:DEV:\$1:\$2:LOOP:PRST";
+    in "STAT:DEV:\$1:\$2:LOOP:PRST:%fmB";
 }
 
 setPresSp {
     # This is intentionally assymetric with getPresSp - the device requires sending PRST but
     # internally uses TSET and this is what we have to query on a read.
-    out "SET:DEV:\$1:\$2:LOOP:PRST:%fmBar";
-    in "STAT:SET:DEV:\$1:\$2:LOOP:PRST:%fmBar:VALID";
+    out "SET:DEV:\$1:\$2:LOOP:PRST:%fmB";
+    in "STAT:SET:DEV:\$1:\$2:LOOP:PRST:%fmB:VALID";
 }
 
 # Raw sensor readings
@@ -135,13 +134,13 @@ setPresSp {
 getRes {
     # Resistance is only used for temperature cards
     out "READ:DEV:\$1:\$2:SIG:RES";
-    in "STAT:DEV:\$1:\$2:SIG:RES:%fO";
+    in "STAT:DEV:\$1:\$2:SIG:RES:%f%*s";
 }
 
 getVolt {
     # Voltage is only used for pressure cards
     out "READ:DEV:\$1:\$2:SIG:VOLT";
-    in "STAT:DEV:\$1:\$2:SIG:VOLT:%fV";
+    in "STAT:DEV:\$1:\$2:SIG:VOLT:%f%*s";
 }
 
 # Heater
@@ -205,7 +204,7 @@ setGasFlowMode {
 
 getGasFlow {
     out "READ:DEV:%(\$1)s:AUX:SIG:PERC";
-    in "STAT:DEV:%*[^:]:AUX:SIG:PERC:%f";
+    in "STAT:DEV:%*[^:]:AUX:SIG:PERC:%f%%";
 }
 
 setGasFlow {
