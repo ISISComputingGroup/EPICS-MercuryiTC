@@ -1,0 +1,49 @@
+# MACROS for IOC
+# P - base name of the IOC 
+# TEMP_CARD
+
+
+record(bi, "$(P)$(TEMP_CARD):FULL_AUTO")
+{
+    field(DESC, "Flow Full Auto ISIS impl")
+    field(INP, "$(P)$(TEMP_CARD):FULL_AUTO:SP")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}
+
+record(bi, "$(P)$(TEMP_CARD):FULL_AUTO:SP")
+{
+    field(DESC, "Flow Full Auto ISIS impl")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+    field(FLNK, "$(P)$(TEMP_CARD):FULL_AUTO:SEL")
+}
+
+alias("$(P)$(TEMP_CARD):FULL_AUTO:SP", "$(P)$(TEMP_CARD):FULL_AUTO:SP:RBV")
+
+record(seq, "$(P)$(TEMP_CARD):FULL_AUTO:SEQ_")
+{
+    field(DESC, "Setup mercury for full auto mode")
+    field(DOL1, "1")  # ON
+    field(LNK1, "$(P)$(TEMP_CARD):PID:AUTO:SP")
+    field(DOL2, "0") # Maunal
+    field(LNK2, "$(P)$(TEMP_CARD):FLOW:STAT:SP")
+    field(DOL3, "0") # Auto
+    field(LNK3, "$(P)$(TEMP_CARD):HEATER:MODE:SP")
+    field(DOL4, "1")  # Auto
+    field(LNK4, "$(P)PRESSURE:$(PRESSURE_CARD):FLOW:STAT:SP")   
+}
+
+record(calcout, "$(P)$(TEMP_CARD):FULL_AUTO:SEL")
+{
+    field(DESC, "Only run sequenc of it is on")
+    field(INPA, "$(P)$(TEMP_CARD):FULL_AUTO:SP")
+    field(CALC, "A")
+    field(OOPT, "When Non-zero")
+    field(OUT, "$(P)$(TEMP_CARD):FULL_AUTO:SEQ_.PROC")
+    field(FLNK, "$(P)$(TEMP_CARD):FULL_AUTO")
+}
