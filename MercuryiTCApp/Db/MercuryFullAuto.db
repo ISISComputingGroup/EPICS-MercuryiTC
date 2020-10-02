@@ -1,6 +1,14 @@
 # MACROS for IOC
 # P - base name of the IOC 
-# TEMP_CARD
+# TEMP_CARD - to control flow for 
+# PRESSURE_CARD - pressure card to control
+# TEMP_DEADBAND - deadband for temperature comparison
+# MIN_PRESSURE - minimum pressure allowed
+# MAX_PRESSURE - maximum pressure allowed
+# OFFSET - offset to add before ramping down from here when stable
+# OFFSET_DURATION - duration in minutes over which to ramp down
+# TIMEPV - pv to give a time 
+# GAIN - gain term for large temperatures
 
 
 record(bi, "$(P)$(TEMP_CARD):FULL_AUTO")
@@ -13,14 +21,15 @@ record(bi, "$(P)$(TEMP_CARD):FULL_AUTO")
     info(archive, "VAL")
 }
 
-record(bi, "$(P)$(TEMP_CARD):FULL_AUTO:SP")
+record(bo, "$(P)$(TEMP_CARD):FULL_AUTO:SP")
 {
     field(DESC, "Flow Full Auto ISIS impl")
     field(ZNAM, "OFF")
     field(ONAM, "ON")
-    info(INTEREST, "HIGH")
+    field(PINI, "NO")
     info(archive, "VAL")
     field(FLNK, "$(P)$(TEMP_CARD):FULL_AUTO:SEL")
+    info(autosaveFields, "VAL")
 }
 
 alias("$(P)$(TEMP_CARD):FULL_AUTO:SP", "$(P)$(TEMP_CARD):FULL_AUTO:SP:RBV")
@@ -46,4 +55,44 @@ record(calcout, "$(P)$(TEMP_CARD):FULL_AUTO:SEL")
     field(OOPT, "When Non-zero")
     field(OUT, "$(P)$(TEMP_CARD):FULL_AUTO:SEQ_.PROC")
     field(FLNK, "$(P)$(TEMP_CARD):FULL_AUTO")
+}
+
+record(aSub, "$(P)$(TEMP_CARD):PRESSURE_CALC")
+{
+    field(SCAN, "1 second")
+    field(SNAM, "calc_pressure")
+
+    field(INPA, "$(P)$(TEMP_CARD):TEMP CP")
+    field(FTA, "DOUBLE")
+    field(INPB, "$(P)$(TEMP_CARD):TEMP:SP CP")
+    field(FTB, "DOUBLE")
+    field(INPC, "$(TEMP_DEADBAND)")
+    field(FTC, "DOUBLE")
+    field(INPD, "$(MIN_PRESSURE)")
+    field(FTD, "DOUBLE")
+    field(INPE, "$(MAX_PRESSURE)")
+    field(FTE, "DOUBLE")
+    field(INPF, "$(OFFSET)")
+    field(FTF, "DOUBLE")
+    field(INPG, "$(OFFSET_DURATION)")
+    field(FTG, "DOUBLE")
+    field(INPH, "$(TIMEPV)")
+    field(FTH, "DOUBLE")
+    field(INPI, "$(P)$(TEMP_CARD):RAMP_START_TIME")  # ramp start time
+    field(FTI, "DOUBLE")
+    field(INPJ, "$(GAIN)")
+    field(FTJ, "DOUBLE")
+    
+    field(OUTA, "$(P)PRESSURE:$(PRESSURE_CARD):FULL_AUTO:SP PP")
+    field(FTVA, "DOUBLE")
+    field(OUTB, "$(P)$(TEMP_CARD):RAMP_START_TIME PP")
+    field(FTVB, "DOUBLE")
+}
+
+record(ai, "$(P)$(TEMP_CARD):RAMP_START_TIME")
+{
+    field(DESC, "Ramp start time")
+    field(PINI, "YES")
+    field(VAL, 0)  # Start at zero this only effects the ramp which it is best to assume has finished.
+    
 }

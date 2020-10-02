@@ -1,0 +1,14 @@
+# MACROS for IOC
+# P - base name of the IOC 
+# TEMP_CARD - temperature card number
+# IFFULL_AUTO_PRESSURE - # not available blank available
+
+
+record(bi, "$(P)$(TEMP_CARD):FULL_AUTO:AVAILABLE")
+{
+    field(DESC, "Is Flow Full Auto available")
+    $(IFFULL_AUTO_PRESSURE) field(VAL, "0")
+    $(IFFULL_AUTO_PRESSURE) field(VAL, "1")
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+}

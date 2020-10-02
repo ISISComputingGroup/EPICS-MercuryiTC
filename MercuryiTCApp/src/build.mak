@@ -28,6 +28,7 @@ $(APPNAME)_DBD += utilities.dbd
 $(APPNAME)_DBD += asyn.dbd
 ## add other dbd here ##
 $(APPNAME)_DBD += parse_catalog.dbd
+$(APPNAME)_DBD += full_auto.dbd
 
 # Add all the support libraries needed by this IOC
 ## ISIS standard libraries ##
@@ -45,6 +46,7 @@ $(APPNAME)_LIBS += utilities pcrecpp pcre libjson zlib asubFunctions
 # MercuryiTC_registerRecordDeviceDriver.cpp derives from MercuryiTC.dbd
 $(APPNAME)_SRCS += $(APPNAME)_registerRecordDeviceDriver.cpp
 $(APPNAME)_SRCS += parse_catalog.c
+$(APPNAME)_SRCS += full_auto.c
 
 # Build the main IOC entry point on workstation OSs.
 $(APPNAME)_SRCS_DEFAULT += $(APPNAME)Main.cpp

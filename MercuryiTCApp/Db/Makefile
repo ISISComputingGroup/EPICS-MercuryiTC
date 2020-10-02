@@ -13,6 +13,7 @@ include $(TOP)/configure/CONFIG
 #DB += xxx.db
 DB += MercuryTemp.db
 DB += MercuryFullAuto.db
+DB += MercuryFullAutoAvailable.db
 DB += MercuryLevel.db
 DB += MercuryPressure.db
 DB += MercuryGlobal.db
