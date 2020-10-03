@@ -45,19 +45,15 @@ epicsEnvSet(DISABLE8, " ")
 
 epicsEnvSet(TEMP_NUM,1)
 < $(MERCURY_ITC)/iocBoot/iocMercuryiTC/st-temp.cmd
-< $(MERCURY_ITC)/iocBoot/iocMercuryiTC/st-temp-full-auto.cmd
 
 epicsEnvSet(TEMP_NUM,2)
 < $(MERCURY_ITC)/iocBoot/iocMercuryiTC/st-temp.cmd
-< $(MERCURY_ITC)/iocBoot/iocMercuryiTC/st-temp-full-auto.cmd
 
 epicsEnvSet(TEMP_NUM,3)
 < $(MERCURY_ITC)/iocBoot/iocMercuryiTC/st-temp.cmd
-< $(MERCURY_ITC)/iocBoot/iocMercuryiTC/st-temp-full-auto.cmd
 
 epicsEnvSet(TEMP_NUM,4)
 < $(MERCURY_ITC)/iocBoot/iocMercuryiTC/st-temp.cmd
-< $(MERCURY_ITC)/iocBoot/iocMercuryiTC/st-temp-full-auto.cmd
 
 epicsEnvSet(LEVEL_NUM,1)
 < $(MERCURY_ITC)/iocBoot/iocMercuryiTC/st-level.cmd
@@ -71,8 +67,7 @@ epicsEnvSet(PRESSURE_NUM,1)
 epicsEnvSet(PRESSURE_NUM,2)
 < $(MERCURY_ITC)/iocBoot/iocMercuryiTC/st-pressure.cmd
 
-
-
+iocshCmdLoop("< $(MERCURY_ITC)/iocBoot/iocMercuryiTC/st-temp-full-auto.cmd", "TEMP_NUM=\$(I)", "I", 1, 4)
 
 dbLoadRecords("db/MercuryGlobal.db", "P=$(MYPVPREFIX)$(IOCNAME):,PORT=L0,RECSIM=$(RECSIM),DISABLE=$(DISABLE)")
 

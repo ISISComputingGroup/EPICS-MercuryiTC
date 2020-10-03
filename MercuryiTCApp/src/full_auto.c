@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <menuFtype.h>
 #include <errlog.h>
+#include <math.h>
 
 /**
  * Settings for full auto mode

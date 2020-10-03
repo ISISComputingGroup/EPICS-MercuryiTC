@@ -17,8 +17,10 @@ record(bi, "$(P)$(TEMP_CARD):FULL_AUTO")
     field(INP, "$(P)$(TEMP_CARD):FULL_AUTO:SP")
     field(ZNAM, "OFF")
     field(ONAM, "ON")
+    field(PINI, "YES")
     info(INTEREST, "HIGH")
     info(archive, "VAL")
+    field(FLNK, "$(P)$(TEMP_CARD):FULL_AUTO:SET_")
 }
 
 record(bo, "$(P)$(TEMP_CARD):FULL_AUTO:SP")
@@ -38,13 +40,13 @@ record(seq, "$(P)$(TEMP_CARD):FULL_AUTO:SEQ_")
 {
     field(DESC, "Setup mercury for full auto mode")
     field(DOL1, "1")  # ON
-    field(LNK1, "$(P)$(TEMP_CARD):PID:AUTO:SP")
+    field(LNK1, "$(P)$(TEMP_CARD):PID:AUTO:SP PP")
     field(DOL2, "0") # Maunal
-    field(LNK2, "$(P)$(TEMP_CARD):FLOW:STAT:SP")
-    field(DOL3, "0") # Auto
-    field(LNK3, "$(P)$(TEMP_CARD):HEATER:MODE:SP")
+    field(LNK2, "$(P)$(TEMP_CARD):FLOW:STAT:SP PP")
+    field(DOL3, "1") # Auto
+    field(LNK3, "$(P)$(TEMP_CARD):HEATER:MODE:SP PP")
     field(DOL4, "1")  # Auto
-    field(LNK4, "$(P)PRESSURE:$(PRESSURE_CARD):FLOW:STAT:SP")   
+    field(LNK4, "$(P)PRESSURE:$(PRESSURE_CARD):FLOW:STAT:SP PP")
 }
 
 record(calcout, "$(P)$(TEMP_CARD):FULL_AUTO:SEL")
@@ -59,12 +61,16 @@ record(calcout, "$(P)$(TEMP_CARD):FULL_AUTO:SEL")
 
 record(aSub, "$(P)$(TEMP_CARD):PRESSURE_CALC")
 {
-    field(SCAN, "1 second")
-    field(SNAM, "calc_pressure")
+    field(SCAN, "2 second")
+    #disable the record when full auto is off (0)
+    field(SDIS, "$(P)$(TEMP_CARD):FULL_AUTO:SP")
+    field(DISV, 0)
+    
+    field(SNAM, "calc_pressure")    
 
-    field(INPA, "$(P)$(TEMP_CARD):TEMP CP")
+    field(INPA, "$(P)$(TEMP_CARD):TEMP")
     field(FTA, "DOUBLE")
-    field(INPB, "$(P)$(TEMP_CARD):TEMP:SP CP")
+    field(INPB, "$(P)$(TEMP_CARD):TEMP:SP")
     field(FTB, "DOUBLE")
     field(INPC, "$(TEMP_DEADBAND)")
     field(FTC, "DOUBLE")
@@ -83,7 +89,7 @@ record(aSub, "$(P)$(TEMP_CARD):PRESSURE_CALC")
     field(INPJ, "$(GAIN)")
     field(FTJ, "DOUBLE")
     
-    field(OUTA, "$(P)PRESSURE:$(PRESSURE_CARD):FULL_AUTO:SP PP")
+    field(OUTA, "$(P)PRESSURE:$(PRESSURE_CARD):PRESSURE:SP PP")
     field(FTVA, "DOUBLE")
     field(OUTB, "$(P)$(TEMP_CARD):RAMP_START_TIME PP")
     field(FTVB, "DOUBLE")
@@ -96,3 +102,15 @@ record(ai, "$(P)$(TEMP_CARD):RAMP_START_TIME")
     field(VAL, 0)  # Start at zero this only effects the ramp which it is best to assume has finished.
     
 }
+
+# For the OPI alias the pressuer into the temp card
+alias("$(P)PRESSURE:$(PRESSURE_CARD):PRESSURE:SP", "$(P)$(TEMP_CARD):FULL_AUTO:PRESSURE")
+
+# Set that pressure is under control of full auto
+record(bo,  "$(P)$(TEMP_CARD):FULL_AUTO:SET_") {
+    field(DESC, "Copy full auto value to pressure card")
+    field(DOL, "$(P)$(TEMP_CARD):FULL_AUTO")
+    field(OMSL, "closed_loop")
+    field(OUT, "$(P)PRESSURE:$(PRESSURE_CARD):FULL_AUTO:SP PP")
+}
+

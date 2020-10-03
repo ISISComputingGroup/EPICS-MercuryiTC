@@ -159,17 +159,13 @@ record(ao, "$(P)PRESSURE:SP")
     field(SDIS, "$(P)DISABLE")
 }
 
-record(ao, "$(P)FULL_AUTO:SP")
+record(bi, "$(P)FULL_AUTO:SP")
 {
-    field(DESC, "Pressure Set Point for full auto")
-    field(DTYP, "stream")
-    field(OUT,  "@mercuryitc.proto setPresSp($(BOARD),PRES) $(PORT)")
-    field(PREC, "3")
-    field(EGU, "mbar")
-    info(INTEREST, "HIGH")
-    info(archive, "VAL")
-    field(SIML, "$(P)SIM")
-    field(SDIS, "$(P)DISABLE")
+    field(DESC, "Flow Full Auto ISIS impl")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+    field(PINI, "YES")
+    field(VAL, 0)
 }
  
 record(ai, "$(P)VOLT")
