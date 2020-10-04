@@ -104,12 +104,13 @@ double pressure_ramp(struct Settings settings, double start_ramp_time, double cu
   */
 double pressure_above_deadband(struct Settings settings, double temp, double temp_sp) {
     double pressure_from_table;
-    
+    double gain_pressure;
+    double pressure_before_ramp;
     
     pressure_from_table = get_pressure_from_table(temp_sp);
-    double gain_pressure = fabs(temp-temp_sp - settings.deadband) * settings.gain_pressure;
+    gain_pressure = fabs(temp-temp_sp - settings.deadband) * settings.gain_pressure;
     gain_pressure = pow(gain_pressure, 2);
-    double pressure_before_ramp = pressure_from_table + gain_pressure;    
+    pressure_before_ramp = pressure_from_table + gain_pressure;
 
     return coerce(pressure_before_ramp, pressure_from_table, settings.maximum_pressure);
 }
