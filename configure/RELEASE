@@ -1,5 +1,6 @@
 # START OF AUTO GENERATED DEPENDENCIES
 ASYN=$(SUPPORT)/asyn/master
+CSM=$(SUPPORT)/csm/master
 ONCRPC=$(SUPPORT)/oncrpc/master
 AUTOSAVE=$(SUPPORT)/autosave/master
 CAPUTLOG=$(SUPPORT)/caPutLog/master

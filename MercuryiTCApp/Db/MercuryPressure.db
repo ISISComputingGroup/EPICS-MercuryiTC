@@ -159,9 +159,9 @@ record(ao, "$(P)PRESSURE:SP")
     field(SDIS, "$(P)DISABLE")
 }
 
-record(bi, "$(P)FULL_AUTO:SP")
+record(bi, "$(P)SPC:SP")
 {
-    field(DESC, "Flow Full Auto ISIS impl")
+    field(DESC, "Software pressure control status")
     field(ZNAM, "OFF")
     field(ONAM, "ON")
     field(PINI, "YES")

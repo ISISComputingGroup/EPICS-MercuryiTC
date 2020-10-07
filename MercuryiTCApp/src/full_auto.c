@@ -6,42 +6,19 @@
 #include <menuFtype.h>
 #include <errlog.h>
 #include <math.h>
+#include <alarm.h>
 
 /**
- * Settings for full auto mode
+ * Settings for full auto mode using SPC
  */
 struct Settings {
     double deadband;  // temperature deadband 
-    double minimum_pressure;  // minimum allowed pressure
-    double maximum_pressure;  // maximum allowed pressure
+    double minimumPressure;  // minimum allowed pressure
+    double maximumPressure;  // maximum allowed pressure
     double offset;  // offset in pressure to ramp up to once the temperature is stable
-    double offset_duration;  // time over which to ramp to the pressure in minutes
-    double gain_pressure;  // gain of pressure per delta in temperature
+    double offsetDuration;  // time over which to ramp to the pressure in minutes
+    double gainPressure;  // gain of pressure per delta in temperature
 };
-
-/**
- * Get the base pressure for a given temperature. 
- * Returns the pressure for the highest temperature below the setpoint from the list.
- * Args:
- *    temp_sp: temperature set point
- * Returns:
- *    base pressure
- */
-double get_pressure_from_table(double temp_sp) {
-    // currently hard coded will be got from somewhere else
-    if (temp_sp < 4)
-        return 35;
-    if (temp_sp < 10)
-        return 35;
-    if (temp_sp < 20)
-        return 25;
-    if (temp_sp < 50)
-        return 14;
-    if (temp_sp < 100)
-        return 10;
-    return 8;
-    
-}
 
 /**
   * Return a value, if it is outside the range return the nearest limit;
@@ -76,19 +53,19 @@ double coerce(double value, double lim1, double lim2) {
  *  Calculate the ramp pressure based so it ramps from offset down to 0 in duration minutes
  *  Args:
  *     settings: auto flow settings
- *     start_ramp_time: of the ramp in seconds
- *     current_time: in seconds
+ *     startRampTime: of the ramp in seconds
+ *     currentTime: in seconds
  *  Returns:
  *      ramp pressure
  */
-double pressure_ramp(struct Settings settings, double start_ramp_time, double current_time) {
-    double ramp_pressure;
-    double duration_in_seconds = settings.offset_duration * 60.0;
+double pressureRamp(struct Settings settings, double startRampTime, double currentTime) {
+    double rampPressure;
+    double durationInSeconds = settings.offsetDuration * 60.0;
     
     // pro-rata amount of pressure to add based on the time since the ramp started
-    ramp_pressure = (1.0 - (current_time - start_ramp_time) / duration_in_seconds) * settings.offset;
+    rampPressure = (1.0 - (currentTime - startRampTime) / durationInSeconds) * settings.offset;
     
-    return coerce(ramp_pressure, 0, settings.offset);
+    return coerce(rampPressure, 0, settings.offset);
 
 }
 
@@ -98,21 +75,19 @@ double pressure_ramp(struct Settings settings, double start_ramp_time, double cu
   * Args:
   *  settings: settings for full auto
   *  temp: current temp
-  *  temp_sp: set point
+  *  tempSP: set point
   * Returns:
   *  pressure
   */
-double pressure_above_deadband(struct Settings settings, double temp, double temp_sp) {
-    double pressure_from_table;
-    double gain_pressure;
-    double pressure_before_ramp;
+double pressureAboveDeadband(struct Settings settings, double temp, double tempSP, double pressureFromTable) {
+    double gainPressure;
+    double pressureBeforeRamp;
     
-    pressure_from_table = get_pressure_from_table(temp_sp);
-    gain_pressure = fabs(temp-temp_sp - settings.deadband) * settings.gain_pressure;
-    gain_pressure = pow(gain_pressure, 2);
-    pressure_before_ramp = pressure_from_table + gain_pressure;
+    gainPressure = fabs(temp-tempSP - settings.deadband) * settings.gainPressure;
+    gainPressure = pow(gainPressure, 2);
+    pressureBeforeRamp = pressureFromTable + gainPressure;
 
-    return coerce(pressure_before_ramp, pressure_from_table, settings.maximum_pressure);
+    return coerce(pressureBeforeRamp, pressureFromTable, settings.maximumPressure);
 }
 
 /** 
@@ -121,32 +96,76 @@ double pressure_above_deadband(struct Settings settings, double temp, double tem
  * Args:
  *  settings: the settings
  *  temp: curent temperature
- *  temp_sp: temperature setpoint
- *  start_ramp_time: time last ramp started, i.e. last time temperature was outside the deadband
- *  current_time: current ime
+ *  tempSP: temperature setpoint
+ *  startRampTime: time last ramp started, i.e. last time temperature was outside the deadband
+ *  currentTime: current ime
  *  pressure: return the pressure that the system should be atan
  * Retruns:
  *   0 for sucess; otherwise error coded
  */
-long pressure_for_temp(struct Settings settings, double temp, double temp_sp, double start_ramp_time, double current_time, double* pressure){
-    double final_pressure;
+long pressureForTemp(struct Settings settings, double temp, double tempSP, double startRampTime, double currentTime, double pressureFromTable, double* pressure){
+    double finalPressure;
     double deadband = settings.deadband;
     
-    double delta_temp = temp - temp_sp;
-    if ( delta_temp <= -2*deadband) {  
+    double deltaTemp = temp - tempSP;
+    if ( deltaTemp <= -2*deadband) {  
         // a long way under the deadband, set at minimum pressure so temp will rise
-        final_pressure = settings.minimum_pressure;
-    } else if (delta_temp <= -deadband){
+        finalPressure = settings.minimumPressure;
+    } else if (deltaTemp <= -deadband){
         // below the deadband set at base pressure so temp will rise
-        final_pressure = get_pressure_from_table(temp_sp);
-    } else if (delta_temp <= deadband){
+        finalPressure = pressureFromTable;
+    } else if (deltaTemp <= deadband){
         // below the deadband set at base pressure so temp will rise
-        final_pressure = get_pressure_from_table(temp_sp) + pressure_ramp(settings, start_ramp_time, current_time);
+        finalPressure = pressureFromTable + pressureRamp(settings, startRampTime, currentTime);
     } else {
-        final_pressure = pressure_above_deadband(settings, temp, temp_sp) + pressure_ramp(settings, start_ramp_time, current_time);
+        finalPressure = pressureAboveDeadband(settings, temp, tempSP, pressureFromTable) + pressureRamp(settings, startRampTime, currentTime);
     }
     
-    *pressure = coerce(final_pressure, settings.minimum_pressure, settings.maximum_pressure);
+    *pressure = coerce(finalPressure, settings.minimumPressure, settings.maximumPressure);
+    return 0;
+}
+
+/**
+  * Get the value of a field from the record ensuring it is of the correct type
+  *
+  * Args:
+  *     prec: pointer to the record
+  *     inpLetter: letter for the input link
+  *     value: value of the input link
+  *     type: type of input link
+  *     output_value: point to where value should be set
+  *  Returns: 0 if ok; 1 otherwise
+  */
+long getFieldFromRecord(aSubRecord *prec, char inpLetter, void* value, epicsEnum16 type, double * output_value){
+    if (type != menuFtypeDOUBLE)
+    {
+        errlogSevPrintf(errlogMajor, "%s incorrect input argument %c type should be DOUBLE", prec, inpLetter);
+        return 1;
+    }
+    *output_value = *(double *)value;
+    return 0;
+}
+
+/**
+  * Check that a severity field is not invalid and of the right type
+  *
+  * Args:
+  *     prec: pointer to the record
+  *     inpLetter: letter for the input link
+  *     value: value of the input link
+  *     type: type of input link
+  *  Returns: 0 if ok and not in alarm; 1 otherwise
+  */
+long notInvalidAlarm(aSubRecord *prec, char inpLetter, void* value, epicsEnum16 type){
+    if (type != menuFtypeENUM)
+    {
+        errlogSevPrintf(errlogMajor, "%s incorrect input argument %c type should be ENUM", prec->name, inpLetter);
+        return 1;
+    }
+    if (*(epicsEnum16  *)value == INVALID_ALARM) {
+         errlogSevPrintf(errlogMajor, "%s link %c is in alarm, not processing record", prec->name, inpLetter);
+         return 1;
+    }
     return 0;
 }
 
@@ -157,99 +176,50 @@ long pressure_for_temp(struct Settings settings, double temp, double temp_sp, do
   Returns:
     0 sucess; error otherwise
 */
-static long calc_pressure(aSubRecord *prec) {
+static long calcPressure(aSubRecord *prec) {
 
     double temp;
-    double temp_sp;
+    double tempSP;
     struct Settings settings;
     long success;
     double pressure;
-    double current_time;
-    double start_ramp_time;
+    double currentTime;
+    double startRampTime;
+    double pressureFromTable;
 
-    if (prec->fta != menuFtypeDOUBLE)
-    {
-        errlogSevPrintf(errlogMajor, "%s incorrect input argument A type should be DOUBLE", prec->name);
-        return 1;
-    }
-    temp = *(double *)prec->a;
     
-    if (prec->ftb != menuFtypeDOUBLE)
-    {
-        errlogSevPrintf(errlogMajor, "%s incorrect input argument B type should be DOUBLE", prec->name);
+    if(getFieldFromRecord(prec, 'A', prec->a, prec->fta, &temp) != 0 ||
+        getFieldFromRecord(prec, 'B', prec->b, prec->ftb, &tempSP) != 0 ||
+        getFieldFromRecord(prec, 'C', prec->c, prec->ftc, &settings.deadband) != 0 ||
+        getFieldFromRecord(prec, 'D', prec->d, prec->ftd, &settings.minimumPressure) != 0 ||
+        getFieldFromRecord(prec, 'E', prec->e, prec->fte, &settings.maximumPressure) != 0 ||
+        getFieldFromRecord(prec, 'F', prec->f, prec->ftf, &settings.offset) != 0 ||
+        getFieldFromRecord(prec, 'G', prec->g, prec->ftg, &settings.offsetDuration) != 0 ||
+        getFieldFromRecord(prec, 'H', prec->h, prec->fth, &currentTime) != 0 ||
+        getFieldFromRecord(prec, 'I', prec->i, prec->fti, &startRampTime) != 0 ||
+        getFieldFromRecord(prec, 'J', prec->j, prec->ftj, &settings.gainPressure) != 0 ||
+        getFieldFromRecord(prec, 'K', prec->k, prec->ftk, &pressureFromTable) != 0 ||
+        notInvalidAlarm(prec, 'L', prec->l, prec->ftl) != 0 ||
+        notInvalidAlarm(prec, 'M', prec->m, prec->ftm) != 0 ||
+        notInvalidAlarm(prec, 'N', prec->n, prec->ftn) != 0) {
         return 1;
-    }
-    temp_sp = *(double *)prec->b;
+    }        
     
-    if (prec->ftc != menuFtypeDOUBLE)
-    {
-        errlogSevPrintf(errlogMajor, "%s incorrect input argument C type should be DOUBLE", prec->name);
-        return 1;
-    }
-    settings.deadband = *(double *)prec->c;
+    errlogSevPrintf(errlogMajor, "Pressure %f final %f", settings.minimumPressure, settings.maximumPressure);
     
-    if (prec->ftd != menuFtypeDOUBLE)
-    {
-        errlogSevPrintf(errlogMajor, "%s incorrect input argument D type should be DOUBLE", prec->name);
-        return 1;
-    }
-    settings.minimum_pressure = *(double *)prec->d;
-        
-    if (prec->fte != menuFtypeDOUBLE)
-    {
-        errlogSevPrintf(errlogMajor, "%s incorrect input argument E type should be DOUBLE", prec->name);
-        return 1;
-    }
-    settings.maximum_pressure = *(double *)prec->e;
-    
-    if (prec->ftf != menuFtypeDOUBLE)
-    {
-        errlogSevPrintf(errlogMajor, "%s incorrect input argument F type should be DOUBLE", prec->name);
-        return 1;
-    }
-    settings.offset = *(double *)prec->f;
-
-    if (prec->ftg != menuFtypeDOUBLE)
-    {
-        errlogSevPrintf(errlogMajor, "%s incorrect input argument G type should be DOUBLE", prec->name);
-        return 1;
-    }
-    settings.offset_duration = *(double *)prec->g;
-
-    if (prec->fth != menuFtypeDOUBLE)
-    {
-        errlogSevPrintf(errlogMajor, "%s incorrect input argument H type should be DOUBLE", prec->name);
-        return 1;
-    }
-    current_time = *(double *)prec->h;
-    
-    if (prec->fti != menuFtypeDOUBLE)
-    {
-        errlogSevPrintf(errlogMajor, "%s incorrect input argument I type should be DOUBLE", prec->name);
-        return 1;
-    }
-    start_ramp_time = *(double *)prec->i;
-
-    if (prec->ftj != menuFtypeDOUBLE)
-    {
-        errlogSevPrintf(errlogMajor, "%s incorrect input argument J type should be DOUBLE", prec->name);
-        return 1;
-    }
-    settings.gain_pressure = *(double *)prec->j;
-
     // reset ramp if temperature is outside the deadband
-    if (fabs(temp - temp_sp) > settings.deadband) {
-        start_ramp_time = current_time;
+    if (fabs(temp - tempSP) > settings.deadband) {
+        startRampTime = currentTime;
     }
     
-    success = pressure_for_temp(settings, temp, temp_sp, start_ramp_time, current_time, &pressure);
+    success = pressureForTemp(settings, temp, tempSP, startRampTime, currentTime, pressureFromTable, &pressure);
     
     if (success == 0) {
         *(double*)prec->vala = pressure;
-        *(double*)prec->valb = start_ramp_time;
+        *(double*)prec->valb = startRampTime;
     }
     
     return success;
 }
 
-epicsRegisterFunction(calc_pressure);
+epicsRegisterFunction(calcPressure);

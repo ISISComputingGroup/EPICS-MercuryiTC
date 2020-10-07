@@ -11,32 +11,32 @@
 # GAIN - gain term for large temperatures
 
 
-record(bi, "$(P)$(TEMP_CARD):FULL_AUTO")
+record(bi, "$(P)$(TEMP_CARD):SPC")
 {
     field(DESC, "Flow Full Auto ISIS impl")
-    field(INP, "$(P)$(TEMP_CARD):FULL_AUTO:SP")
+    field(INP, "$(P)$(TEMP_CARD):SPC:SP")
     field(ZNAM, "OFF")
     field(ONAM, "ON")
     field(PINI, "YES")
     info(INTEREST, "HIGH")
     info(archive, "VAL")
-    field(FLNK, "$(P)$(TEMP_CARD):FULL_AUTO:SET_")
+    field(FLNK, "$(P)$(TEMP_CARD):SPC:SET_")
 }
 
-record(bo, "$(P)$(TEMP_CARD):FULL_AUTO:SP")
+record(bo, "$(P)$(TEMP_CARD):SPC:SP")
 {
     field(DESC, "Flow Full Auto ISIS impl")
     field(ZNAM, "OFF")
     field(ONAM, "ON")
     field(PINI, "NO")
     info(archive, "VAL")
-    field(FLNK, "$(P)$(TEMP_CARD):FULL_AUTO:SEL")
+    field(FLNK, "$(P)$(TEMP_CARD):SPC:SEL")
     info(autosaveFields, "VAL")
 }
 
-alias("$(P)$(TEMP_CARD):FULL_AUTO:SP", "$(P)$(TEMP_CARD):FULL_AUTO:SP:RBV")
+alias("$(P)$(TEMP_CARD):SPC:SP", "$(P)$(TEMP_CARD):SPC:SP:RBV")
 
-record(seq, "$(P)$(TEMP_CARD):FULL_AUTO:SEQ_")
+record(seq, "$(P)$(TEMP_CARD):SPC:SEQ_")
 {
     field(DESC, "Setup mercury for full auto mode")
     field(DOL1, "1")  # ON
@@ -49,28 +49,44 @@ record(seq, "$(P)$(TEMP_CARD):FULL_AUTO:SEQ_")
     field(LNK4, "$(P)PRESSURE:$(PRESSURE_CARD):FLOW:STAT:SP PP")
 }
 
-record(calcout, "$(P)$(TEMP_CARD):FULL_AUTO:SEL")
+record(calcout, "$(P)$(TEMP_CARD):SPC:SEL")
 {
     field(DESC, "Only run sequenc of it is on")
-    field(INPA, "$(P)$(TEMP_CARD):FULL_AUTO:SP")
+    field(INPA, "$(P)$(TEMP_CARD):SPC:SP")
     field(CALC, "A")
     field(OOPT, "When Non-zero")
-    field(OUT, "$(P)$(TEMP_CARD):FULL_AUTO:SEQ_.PROC")
-    field(FLNK, "$(P)$(TEMP_CARD):FULL_AUTO")
+    field(OUT, "$(P)$(TEMP_CARD):SPC:SEQ_.PROC")
+    field(FLNK, "$(P)$(TEMP_CARD):SPC")
+}
+
+
+record(cvt, "$(P)$(TEMP_CARD):SPC:TARGET")
+{
+  field(DESC, "Calculate pressure from calib file")
+  field(SCAN, "Passive")
+  field(PREC, "2")
+  field(EGU, "mbar")
+  field(INPX, "$(P)$(TEMP_CARD):TEMP:SP:RBV")
+  field(METH, "1D TABLE USER SUB")
+  field(SPEC, "little_blue_cryostat.txt")
+  field(TDIR, "$(CALIB_DIR)")
+  field(BDIR, "$(CALIB_BASE_DIR)")
+  info(INTEREST, "LOW")
+  field(FLNK, "$(P)$(TEMP_CARD):PRESSURE_CALC")
 }
 
 record(aSub, "$(P)$(TEMP_CARD):PRESSURE_CALC")
 {
     field(SCAN, "2 second")
     #disable the record when full auto is off (0)
-    field(SDIS, "$(P)$(TEMP_CARD):FULL_AUTO:SP")
+    field(SDIS, "$(P)$(TEMP_CARD):SPC:SP")
     field(DISV, 0)
     
-    field(SNAM, "calc_pressure")    
+    field(SNAM, "calcPressure")    
 
     field(INPA, "$(P)$(TEMP_CARD):TEMP")
     field(FTA, "DOUBLE")
-    field(INPB, "$(P)$(TEMP_CARD):TEMP:SP")
+    field(INPB, "$(P)$(TEMP_CARD):TEMP:SP:RBV")  # read back from device so that when restarted prop term is right
     field(FTB, "DOUBLE")
     field(INPC, "$(TEMP_DEADBAND)")
     field(FTC, "DOUBLE")
@@ -88,6 +104,15 @@ record(aSub, "$(P)$(TEMP_CARD):PRESSURE_CALC")
     field(FTI, "DOUBLE")
     field(INPJ, "$(GAIN)")
     field(FTJ, "DOUBLE")
+    field(INPK, "$(P)$(TEMP_CARD):SPC:TARGET PP")
+    field(FTK, "DOUBLE")
+
+    field(INPL, "$(P)$(TEMP_CARD):TEMP.SEVR")
+    field(FTL, "ENUM")
+    field(INPM, "$(P)$(TEMP_CARD):TEMP:SP:RBV.SEVR") 
+    field(FTM, "ENUM")
+    field(INPN, "$(P)$(TEMP_CARD):SPC:TARGET.SEVR") 
+    field(FTN, "ENUM")    
     
     field(OUTA, "$(P)PRESSURE:$(PRESSURE_CARD):PRESSURE:SP PP")
     field(FTVA, "DOUBLE")
@@ -104,13 +129,12 @@ record(ai, "$(P)$(TEMP_CARD):RAMP_START_TIME")
 }
 
 # For the OPI alias the pressuer into the temp card
-alias("$(P)PRESSURE:$(PRESSURE_CARD):PRESSURE:SP", "$(P)$(TEMP_CARD):FULL_AUTO:PRESSURE")
+alias("$(P)PRESSURE:$(PRESSURE_CARD):PRESSURE:SP", "$(P)$(TEMP_CARD):SPC:PRESSURE")
 
 # Set that pressure is under control of full auto
-record(bo,  "$(P)$(TEMP_CARD):FULL_AUTO:SET_") {
+record(bo,  "$(P)$(TEMP_CARD):SPC:SET_") {
     field(DESC, "Copy full auto value to pressure card")
-    field(DOL, "$(P)$(TEMP_CARD):FULL_AUTO")
+    field(DOL, "$(P)$(TEMP_CARD):SPC")
     field(OMSL, "closed_loop")
-    field(OUT, "$(P)PRESSURE:$(PRESSURE_CARD):FULL_AUTO:SP PP")
+    field(OUT, "$(P)PRESSURE:$(PRESSURE_CARD):SPC:SP PP")
 }
-
