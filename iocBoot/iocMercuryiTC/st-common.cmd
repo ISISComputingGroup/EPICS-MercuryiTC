@@ -4,7 +4,7 @@
 epicsEnvSet "STREAM_PROTOCOL_PATH" "$(MERCURY_ITC)/data"
 
 ## Environment Variables
-epicsEnvSet "CALIB_BASE_DIR" "C:/Instrument/Settings/config/common"
+epicsEnvSet "CALIB_BASE_DIR" "$(ICPCONFIGBASE)/common"
 epicsEnvSet "CALIB_DIR" "other_devices"
 
 ## For recsim:

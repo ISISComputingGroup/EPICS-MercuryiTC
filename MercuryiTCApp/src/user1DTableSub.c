@@ -1,6 +1,4 @@
-/*  03/2019 - dzd77598
-
-    For use with the cvt Record. This file produces a not linearly interpreted fit
+/*  For use with the cvt Record. This file produces a not linearly interpreted fit
 
     The function must be named *** user1DTableSub.c *** because there is no clean way (without significant restructure
     of the cvt record) to pass in a user defined function name AND a clibration file to produce a fit from. 

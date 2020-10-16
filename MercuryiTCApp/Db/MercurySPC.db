@@ -53,7 +53,7 @@ record(seq, "$(P)$(TEMP_CARD):SPC:SEQ_")
 
 record(calcout, "$(P)$(TEMP_CARD):SPC:SEL")
 {
-    field(DESC, "Only run sequenc of it is on")
+    field(DESC, "Only run sequence if it is on")
     field(INPA, "$(P)$(TEMP_CARD):SPC:SP")
     field(CALC, "A")
     field(OOPT, "When Non-zero")
@@ -130,7 +130,7 @@ record(ai, "$(P)$(TEMP_CARD):RAMP_START_TIME")
     
 }
 
-# For the OPI alias the pressuer into the temp card
+# For the OPI alias the pressure into the temp card
 alias("$(P)PRESSURE:$(PRESSURE_CARD):PRESSURE:SP", "$(P)$(TEMP_CARD):SPC:PRESSURE")
 
 # Set that pressure is under control of full auto
