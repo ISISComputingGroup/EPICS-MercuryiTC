@@ -3,6 +3,10 @@
 
 epicsEnvSet "STREAM_PROTOCOL_PATH" "$(MERCURY_ITC)/data"
 
+## Environment Variables
+epicsEnvSet "CALIB_BASE_DIR" "$(ICPCONFIGBASE)/common"
+epicsEnvSet "CALIB_DIR" "other_devices"
+
 ## For recsim:
 $(IFRECSIM) drvAsynSerialPortConfigure("L0", "$(PORT=NUL)", 0, 1, 0, 0)
 
@@ -43,32 +47,15 @@ epicsEnvSet(DISABLE6, " ")
 epicsEnvSet(DISABLE7, " ")
 epicsEnvSet(DISABLE8, " ")
 
-epicsEnvSet(TEMP_NUM,1)
-< $(MERCURY_ITC)/iocBoot/iocMercuryiTC/st-temp.cmd
+iocshCmdLoop("< $(MERCURY_ITC)/iocBoot/iocMercuryiTC/st-temp.cmd", "TEMP_NUM=\$(I)", "I", 1, 4)
 
-epicsEnvSet(TEMP_NUM,2)
-< $(MERCURY_ITC)/iocBoot/iocMercuryiTC/st-temp.cmd
+iocshCmdLoop("< $(MERCURY_ITC)/iocBoot/iocMercuryiTC/st-level.cmd", "LEVEL_NUM=\$(I)", "I", 1, 2)
 
-epicsEnvSet(TEMP_NUM,3)
-< $(MERCURY_ITC)/iocBoot/iocMercuryiTC/st-temp.cmd
+iocshCmdLoop("< $(MERCURY_ITC)/iocBoot/iocMercuryiTC/st-pressure.cmd", "PRESSURE_NUM=\$(I)", "I", 1, 2)
 
-epicsEnvSet(TEMP_NUM,4)
-< $(MERCURY_ITC)/iocBoot/iocMercuryiTC/st-temp.cmd
+iocshCmdLoop("< $(MERCURY_ITC)/iocBoot/iocMercuryiTC/st-temp-spc.cmd", "TEMP_NUM=\$(J)", "J", 1, 4)
 
-epicsEnvSet(LEVEL_NUM,1)
-< $(MERCURY_ITC)/iocBoot/iocMercuryiTC/st-level.cmd
-
-epicsEnvSet(LEVEL_NUM,2)
-< $(MERCURY_ITC)/iocBoot/iocMercuryiTC/st-level.cmd
-
-epicsEnvSet(PRESSURE_NUM,1)
-< $(MERCURY_ITC)/iocBoot/iocMercuryiTC/st-pressure.cmd
-
-epicsEnvSet(PRESSURE_NUM,2)
-< $(MERCURY_ITC)/iocBoot/iocMercuryiTC/st-pressure.cmd
-
-
-dbLoadRecords("db/MercuryGlobal.db", "P=$(MYPVPREFIX)$(IOCNAME):,PORT=L0,RECSIM=$(RECSIM),DISABLE=$(DISABLE)")
+dbLoadRecords("$(MERCURY_ITC)/db/MercuryGlobal.db", "P=$(MYPVPREFIX)$(IOCNAME):,PORT=L0,RECSIM=$(RECSIM),DISABLE=$(DISABLE)")
 
 
 ##ISIS## Stuff that needs to be done after all records are loaded but before iocInit is called 

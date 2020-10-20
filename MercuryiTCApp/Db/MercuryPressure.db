@@ -158,6 +158,15 @@ record(ao, "$(P)PRESSURE:SP")
     field(SIOL, "$(P)SIM:TEMP:SP")
     field(SDIS, "$(P)DISABLE")
 }
+
+record(bi, "$(P)SPC:SP")
+{
+    field(DESC, "Software pressure control status")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+    field(PINI, "YES")
+    field(VAL, 0)
+}
  
 record(ai, "$(P)VOLT")
 {
