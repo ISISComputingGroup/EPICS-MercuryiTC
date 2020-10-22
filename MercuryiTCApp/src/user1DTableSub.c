@@ -45,12 +45,13 @@ struct InitData {
 static double user1DTableSub(int isInit, double x_data[], double y_data[], int len_arr, double x, void ** dpvt) {
     struct InitData *p_initData;
     double val = 0;
+    int i;
     if (isInit == 1) {
         p_initData = malloc(sizeof(struct InitData));
         p_initData->len_arr = len_arr;
         p_initData->x_data = malloc(sizeof(double)*p_initData->len_arr);
         p_initData->y_data = malloc(sizeof(double)*p_initData->len_arr);
-        for (int i=0; i<len_arr; i++) {
+        for (i=0; i<len_arr; i++) {
             p_initData->x_data[i] = x_data[i];
             p_initData->y_data[i] = y_data[i];
         }
@@ -62,7 +63,7 @@ static double user1DTableSub(int isInit, double x_data[], double y_data[], int l
         
             // csm_read_1d_table automatically sorts arrays into ascending order. 
             val=p_initData->x_data[0];
-            for (int i =0; i<p_initData->len_arr; i++){
+            for (i=0; i<p_initData->len_arr; i++){
                 if (x < p_initData->x_data[i]) {
                     break;
                 }
