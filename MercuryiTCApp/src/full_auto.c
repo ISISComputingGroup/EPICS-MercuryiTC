@@ -139,7 +139,7 @@ long pressureForTemp(struct Settings settings, double temp, double tempSP, doubl
 long getFieldFromRecord(aSubRecord *prec, char inpLetter, void* value, epicsEnum16 type, double * output_value){
     if (type != menuFtypeDOUBLE)
     {
-        errlogSevPrintf(errlogMajor, "%s incorrect input argument %c type should be DOUBLE", prec, inpLetter);
+        errlogSevPrintf(errlogMajor, "%s incorrect input argument %c type should be DOUBLE", prec->name, inpLetter);
         return 1;
     }
     *output_value = *(double *)value;
