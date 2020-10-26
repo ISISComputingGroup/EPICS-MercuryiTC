@@ -1,9 +1,23 @@
 TOP=../..
-# This file should do very little - it's purpose is to set the APPNAME and then load build.mak
 
-# this definition is used in build.mak
-APPNAME=MercuryiTC
+include $(TOP)/configure/CONFIG
+#----------------------------------------
+#  ADD MACRO DEFINITIONS AFTER THIS LINE
+#=============================
 
-# If we are ###-IOC-01 leave this as is, if we are ###-IOC-02 or higher change to ###-IOC-01 and delete build.mak from this directory
-# there should only be a single build.mak for all IOCs of a given family and it is located in the ###-IOC-01 directory
-include $(TOP)/MercuryiTCApp/src/build.mak
+LIBRARY_IOC = MercuryiTC
+# MercuryiTC.dbd will be created and installed
+DBD += MercuryiTC.dbd
+
+MercuryiTC_DBD += parse_catalog.dbd
+MercuryiTC_DBD += full_auto.dbd
+
+MercuryiTC__SRCS += parse_catalog.c full_auto.c user1DTableSub.c
+MercuryiTC_LIBS += $(EPICS_BASE_IOC_LIBS)
+
+#===========================
+
+include $(TOP)/configure/RULES
+#----------------------------------------
+#  ADD RULES AFTER THIS LINE
+
