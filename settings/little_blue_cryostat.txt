@@ -1,0 +1,19 @@
+# ISIS calibration
+# {
+#    "sensor_type": "Eurotherm Managed",
+#    "format_version": "1",
+#    "conversion_date": "2019/01/04",
+#    "column1_name": "Temperature",
+#    "column1_units": "C",
+#    "column2_name": "Voltage",
+#    "column2_units": "C"
+# }
+0.0      35.0
+4.0      35.0
+10.0     25.0
+20.0     14.0
+50.0     10.0
+100.0    8.0
+150.0    8.0
+200.0    8.0
+280.0    8.0
