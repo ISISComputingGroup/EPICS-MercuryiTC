@@ -1,24 +1,3 @@
-# START OF AUTO GENERATED DEPENDENCIES
-ASYN=$(SUPPORT)/asyn/master
-CSM=$(SUPPORT)/csm/master
-ONCRPC=$(SUPPORT)/oncrpc/master
-AUTOSAVE=$(SUPPORT)/autosave/master
-CAPUTLOG=$(SUPPORT)/caPutLog/master
-DEVIOCSTATS=$(SUPPORT)/devIocStats/master
-ICPCONFIG=$(SUPPORT)/icpconfig/master
-LIBJSON=$(SUPPORT)/libjson/master
-LVDCOM=$(ISISSUPPORT)/lvDCOM/master
-MYSQL=$(SUPPORT)/MySQL/master
-PCRE=$(SUPPORT)/pcre/master
-PUGIXML=$(SUPPORT)/pugixml/master
-PVDUMP=$(SUPPORT)/pvdump/master
-SNCSEQ=$(SUPPORT)/seq/master
-SQLITE=$(SUPPORT)/sqlite/master
-UTILITIES=$(SUPPORT)/utilities/master
-ZLIB=$(SUPPORT)/zlib/master
-ASUBFUNCTIONS=$(SUPPORT)/asubFunctions/master
-
-# END OF AUTO GENERATED DEPENDENCIES
 
 # optional extra local definitions here
 -include $(TOP)/configure/RELEASE.private
