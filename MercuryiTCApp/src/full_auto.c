@@ -205,8 +205,6 @@ static long calcPressure(aSubRecord *prec) {
         return 1;
     }        
     
-    errlogSevPrintf(errlogMajor, "Pressure %f final %f", settings.minimumPressure, settings.maximumPressure);
-    
     // reset ramp if temperature is outside the deadband
     if (fabs(temp - tempSP) > settings.deadband) {
         startRampTime = currentTime;
