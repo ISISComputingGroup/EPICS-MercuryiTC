@@ -1,5 +1,10 @@
 Terminator = LF;
 
+ReplyTimeout = 2000;
+ReadTimeout = 1000;
+WriteTimeout = 1000;
+LockTimeout = 30000;
+
 # System-wide commands
 
 getCatalog {
