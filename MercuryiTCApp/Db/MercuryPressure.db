@@ -383,6 +383,8 @@ record(ai, "$(P)HEATER:VOLT")
 record(calc, "$(P)HEATER:VOLT_PRCNT")
 {
     field(DESC, "% of voltage limit used")
+    field(PREC, "3")
+    field(EGU,  "%")
     field(INPA, "$(P)HEATER:VOLT CP MSS")
     field(INPB, "$(P)HEATER:VOLT_LIMIT CP MSS")
     field(CALC, "B > 0 ? (A / B) * 100 : 0")
