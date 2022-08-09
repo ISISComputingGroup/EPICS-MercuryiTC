@@ -374,6 +374,16 @@ record(ai, "$(P)HEATER:VOLT")
     field(SDIS, "$(P)DISABLE")
 }
 
+record(calc, "$(P)HEATER:VOLT_PRCNT")
+{
+    field(DESC, "% of voltage limit used")
+    field(PREC, "3")
+    field(EGU,  "%")
+    field(INPA, "$(P)HEATER:VOLT CP MSS")
+    field(INPB, "$(P)HEATER:VOLT_LIMIT CP MSS")
+    field(CALC, "B > 0 ? (A / B) * 100 : 0")
+}
+
 record(ai, "$(P)HEATER:CURR")
 {
     field(DESC, "Current on the heater")
