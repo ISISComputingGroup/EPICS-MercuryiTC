@@ -61,6 +61,12 @@ record(aSub, "$(P)CATALOG:PARSE")
     field(NOVE, "64")
 }
 
+record(mbbo, "$(P)STATEMACHINE:STATE")
+{
+    field(DESC, "Statemachine state")
+    field(ZRST, "init")
+}
+
 record(waveform, "$(P)SIM:CATALOG:_RAW")
 {
     
