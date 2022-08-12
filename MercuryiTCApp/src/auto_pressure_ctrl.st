@@ -3,6 +3,7 @@ program auto_pressure_ctrl("P")
 #include "seqPVmacros.h"
 %% #include "seq_snc.h"
 %% #include "errlog.h"
+%% #include "string.h"
 
 /* Turn on run-time debug messages */
 option +d;
@@ -14,6 +15,7 @@ option +r;
 option +s;
 
 PV(string, statemachine_state, "{P}STATEMACHINE:STATE", NoMon);
+PV(int, statemachine_enabled, "{P}STATEMACHINE:STATUS", Monitor);
 
 %{
   static const char* const PROGRAM_NAME = "auto_pressure_ctrl.st";
@@ -32,6 +34,16 @@ ss auto_pressure_ctrl
         entry
         {
             TRANSITION_TO_STATE("init");
+        }
+
+        when(statemachine_enabled) {
+        } state calc_new_sp
+    }
+
+    state calc_new_sp {
+        entry
+        {
+            TRANSITION_TO_STATE("calc_new_sp");
         }
 
         when(0) {

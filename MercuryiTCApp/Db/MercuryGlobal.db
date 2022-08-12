@@ -65,6 +65,14 @@ record(mbbo, "$(P)STATEMACHINE:STATE")
 {
     field(DESC, "Statemachine state")
     field(ZRST, "init")
+    field(ONST, "calc_new_sp")
+}
+
+record(bo, "$(P)STATEMACHINE:STATUS")
+{
+    field(DESC, "Whether the statemachine is enabled")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
 }
 
 record(waveform, "$(P)SIM:CATALOG:_RAW")
