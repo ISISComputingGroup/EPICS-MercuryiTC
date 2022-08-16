@@ -14,6 +14,7 @@ include $(TOP)/configure/CONFIG
 DB += MercuryTemp.db
 DB += MercuryFlowSPC.db
 DB += MercurySPCAvailable.db
+DB += MercuryVTISPC.db
 DB += MercuryLevel.db
 DB += MercuryPressure.db
 DB += MercuryGlobal.db

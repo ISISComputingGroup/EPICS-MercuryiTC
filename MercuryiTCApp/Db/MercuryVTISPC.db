@@ -1,0 +1,24 @@
+# MACROS for IOC
+# P - base name for IOC
+# MIN_PRESSURE
+
+record(mbbo, "$(P)STATEMACHINE:STATE")
+{
+    field(DESC, "Statemachine state")
+    field(ZRST, "init")
+    field(ONST, "calc_new_sp")
+}
+
+record(bo, "$(P)STATEMACHINE:STATUS")
+{
+    field(DESC, "Whether the statemachine is enabled")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+}
+
+record(ao, "$(P)VTI_SPC:PRESSURE:SP:MIN")
+{
+    field(DESC, "Minimum pressure allowed by user")
+    field(VAL,  "$(MIN_PRESSURE)")
+    field(PINI, "YES")
+}

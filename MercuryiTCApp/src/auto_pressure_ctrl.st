@@ -1,4 +1,4 @@
-program auto_pressure_ctrl("P")
+program auto_pressure_ctrl("P,PRESSURE_CARD_NUM,TEMP_CARD_NUM")
 
 #include "seqPVmacros.h"
 %% #include "seq_snc.h"
@@ -16,9 +16,16 @@ option +s;
 
 PV(string, statemachine_state, "{P}STATEMACHINE:STATE", NoMon);
 PV(int, statemachine_enabled, "{P}STATEMACHINE:STATUS", Monitor);
+PV(double, pressure_sp_min, "{P}VTI_SPC:PRESSURE:SP:MIN", Monitor);
+PV(double, temperature, "{P}{TEMP_CARD_NUM}:TEMP", Monitor);
+PV(double, temperature_sp_rbv, "{P}{TEMP_CARD_NUM}:TEMP:SP:RBV", Monitor);
+PV(double, pressure_sp_rbv, "{P}PRESSURE:{PRESSURE_CARD_NUM}:PRESSURE:SP:RBV", Monitor);
+PV(double, pressure_sp, "{P}PRESSURE:{PRESSURE_CARD_NUM}:PRESSURE:SP", NoMon);
 
 %{
   static const char* const PROGRAM_NAME = "auto_pressure_ctrl.st";
+
+  double new_pressure_sp = 0.0;
 
   /* This needs to be a macro as the call to pvIndex has to happen from SNL code, not C code. */
   /* See https://www-csr.bessy.de/control/SoftDist/sequencer/EscapeToC.html?highlight=pvindex#calling-pv-functions-from-c */
@@ -44,11 +51,43 @@ ss auto_pressure_ctrl
         entry
         {
             TRANSITION_TO_STATE("calc_new_sp");
+
+            if(temperature <= temperature_sp_rbv) {
+              new_pressure_sp = pressure_sp_min;
+            } else {
+              // TODO: Lower part of flowchart
+            }
         }
 
-        when(0) {
+        when(new_pressure_sp != pressure_sp_rbv) {
+          PVPUT(pressure_sp, new_pressure_sp);
+        } state update_delay
 
-        } state init
+        when(new_pressure_sp == pressure_sp_rbv) {
+          // Do nothing.
+        } state polling_delay
+    }
+
+    state update_delay {
+      entry
+      {
+        TRANSITION_TO_STATE("update_delay");
+      }
+
+      when(delay(10)) {
+        // Avoid overloading the device.
+      } state init
+    }
+
+    state polling_delay {
+      entry
+      {
+        TRANSITION_TO_STATE("polling_delay");
+      }
+
+      when(delay(1)) {
+        // Avoid overloading the processor.
+      } state init
     }
 }
 
