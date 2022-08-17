@@ -17,12 +17,14 @@ option +s;
 PV(string, statemachine_state, "{P}STATEMACHINE:STATE", NoMon);
 PV(int, statemachine_enabled, "{P}STATEMACHINE:STATUS", Monitor);
 PV(double, pressure_sp_min, "{P}VTI_SPC:PRESSURE:SP:MIN", Monitor);
+PV(double, pressure_sp_max, "{P}VTI_SPC:PRESSURE:SP:MAX", Monitor);
+PV(double, pressure_const, "{P}VTI_SPC:PRESSURE:CONST", Monitor);
+PV(double, temperature_cutoff, "{P}VTI_SPC:TEMP:CUTOFF", Monitor);
+
 PV(double, temperature, "{P}{TEMP_CARD_NUM}:TEMP", Monitor);
 PV(double, temperature_sp_rbv, "{P}{TEMP_CARD_NUM}:TEMP:SP:RBV", Monitor);
 PV(double, pressure_sp_rbv, "{P}PRESSURE:{PRESSURE_CARD_NUM}:PRESSURE:SP:RBV", Monitor);
 PV(double, pressure_sp, "{P}PRESSURE:{PRESSURE_CARD_NUM}:PRESSURE:SP", NoMon);
-PV(double, temperature_cutoff, "{P}VTI_SPC:TEMP:CUTOFF", Monitor);
-PV(double, pressure_const, "{P}VTI_SPC:PRESSURE:CONST", Monitor);
 
 %{
   static const char* const PROGRAM_NAME = "auto_pressure_ctrl.st";
@@ -57,12 +59,19 @@ ss auto_pressure_ctrl
             if(temperature <= temperature_sp_rbv) {
               new_pressure_sp = pressure_sp_min;
             } else {
+              // Check cutoff for constant vs interpolation calc
               if(temperature_sp_rbv < temperature_cutoff) {
                 new_pressure_sp = pressure_const;
               } else {
-                // Linear interpolation bit
+                // Linear interpolation step
               }
-              // Min/Max Check
+
+              // Check within user-set pressure bounds
+              if(new_pressure_sp < pressure_sp_min) {
+                new_pressure_sp = pressure_sp_min;
+              } else if (new_pressure_sp > pressure_sp_max) {
+                new_pressure_sp = pressure_sp_max;
+              }
             }
         }
 

@@ -32,6 +32,13 @@ record(ao, "$(P)VTI_SPC:PRESSURE:SP:MIN")
     field(PINI, "YES")
 }
 
+record(ao, "$(P)VTI_SPC:PRESSURE:SP:MAX")
+{
+    field(DESC, "Maximum pressure allowed by user")
+    field(VAL,  "$(MAX_PRESSURE)")
+    field(PINI, "YES")
+}
+
 record(ao, "$(P)VTI_SPC:PRESSURE:CONST")
 {
     field(DESC, "Constant pressure used when below cutoff")
