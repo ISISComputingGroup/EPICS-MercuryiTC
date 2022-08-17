@@ -7,6 +7,8 @@ record(mbbo, "$(P)STATEMACHINE:STATE")
     field(DESC, "Statemachine state")
     field(ZRST, "init")
     field(ONST, "calc_new_sp")
+    field(TWST, "update_delay")
+    field(THST, "polling_delay")
 }
 
 record(bo, "$(P)STATEMACHINE:STATUS")
@@ -16,9 +18,23 @@ record(bo, "$(P)STATEMACHINE:STATUS")
     field(ONAM, "On")
 }
 
+record(ao, "$(P)VTI_SPC:TEMP:CUTOFF")
+{
+    field(DESC, "Constant vs linear interpolation switch")
+    field(VAL,  "$(TEMP_CUTOFF_POINT)")
+    field(PINI, "YES")
+}
+
 record(ao, "$(P)VTI_SPC:PRESSURE:SP:MIN")
 {
     field(DESC, "Minimum pressure allowed by user")
     field(VAL,  "$(MIN_PRESSURE)")
     field(PINI, "YES")
+}
+
+record(ao, "$(P)VTI_SPC:PRESSURE:CONST")
+{
+    field(DESC, "Constant pressure used when below cutoff")
+    field(VAL,  "$(PRESSURE_CONSTANT)")
+    feild(PINI, "YES")
 }
