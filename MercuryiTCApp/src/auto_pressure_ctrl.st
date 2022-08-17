@@ -14,8 +14,8 @@ option +r;
 /* Safe mode */
 option +s;
 
-PV(string, statemachine_state, "{P}STATEMACHINE:STATE", NoMon);
-PV(int, statemachine_enabled, "{P}STATEMACHINE:STATUS", Monitor);
+PV(string, statemachine_state, "{P}VTI_SPC:STATEMACHINE:STATE", NoMon);
+PV(int, statemachine_enabled, "{P}VTI_SPC:STATEMACHINE:STATUS", Monitor);
 PV(double, pressure_sp_min, "{P}VTI_SPC:PRESSURE:SP:MIN", Monitor);
 PV(double, pressure_sp_max, "{P}VTI_SPC:PRESSURE:SP:MAX", Monitor);
 PV(double, pressure_const, "{P}VTI_SPC:PRESSURE:CONST", Monitor);

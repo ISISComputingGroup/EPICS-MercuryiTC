@@ -2,7 +2,7 @@
 # P - base name for IOC
 # MIN_PRESSURE
 
-record(mbbo, "$(P)STATEMACHINE:STATE")
+record(mbbo, "$(P)VTI_SPC:STATEMACHINE:STATE")
 {
     field(DESC, "Statemachine state")
     field(ZRST, "init")
@@ -11,7 +11,7 @@ record(mbbo, "$(P)STATEMACHINE:STATE")
     field(THST, "polling_delay")
 }
 
-record(bo, "$(P)STATEMACHINE:STATUS")
+record(bo, "$(P)VTI_SPC:STATEMACHINE:STATUS")
 {
     field(DESC, "Whether the statemachine is enabled")
     field(ZNAM, "Off")
