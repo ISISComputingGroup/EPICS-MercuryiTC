@@ -60,10 +60,11 @@ ss auto_pressure_ctrl
               new_pressure_sp = pressure_sp_min;
             } else {
               // Check cutoff for constant vs interpolation calc
-              if(temperature_sp_rbv < temperature_cutoff) {
+              if(temperature_sp_rbv <= temperature_cutoff && temperature <= temperature_cutoff) {
                 new_pressure_sp = pressure_const;
               } else {
                 // Linear interpolation step
+                new_pressure_sp = -1;
               }
 
               // Check within user-set pressure bounds
