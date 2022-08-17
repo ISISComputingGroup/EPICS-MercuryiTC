@@ -25,6 +25,13 @@ record(ao, "$(P)VTI_SPC:TEMP:CUTOFF")
     field(PINI, "YES")
 }
 
+record(ao, "$(P)VTI_SPC:TEMP:SCALE")
+{
+    field(DESC, "Scaling factor for temperature calculations")
+    field(VAL,  "$(TEMP_SCALE)")
+    field(PINI, "YES")
+}
+
 record(ao, "$(P)VTI_SPC:PRESSURE:SP:MIN")
 {
     field(DESC, "Minimum pressure allowed by user")

@@ -4,6 +4,7 @@ program auto_pressure_ctrl("P,PRESSURE_CARD_NUM,TEMP_CARD_NUM")
 %% #include "seq_snc.h"
 %% #include "errlog.h"
 %% #include "string.h"
+%% #include "math.h"
 
 /* Turn on run-time debug messages */
 option +d;
@@ -20,6 +21,7 @@ PV(double, pressure_sp_min, "{P}VTI_SPC:PRESSURE:SP:MIN", Monitor);
 PV(double, pressure_sp_max, "{P}VTI_SPC:PRESSURE:SP:MAX", Monitor);
 PV(double, pressure_const, "{P}VTI_SPC:PRESSURE:CONST", Monitor);
 PV(double, temperature_cutoff, "{P}VTI_SPC:TEMP:CUTOFF", Monitor);
+PV(double, temperature_scale, "{P}VTI_SPC:TEMP:SCALE", Monitor);
 
 PV(double, temperature, "{P}{TEMP_CARD_NUM}:TEMP", Monitor);
 PV(double, temperature_sp_rbv, "{P}{TEMP_CARD_NUM}:TEMP:SP:RBV", Monitor);
@@ -63,8 +65,8 @@ ss auto_pressure_ctrl
               if(temperature_sp_rbv <= temperature_cutoff && temperature <= temperature_cutoff) {
                 new_pressure_sp = pressure_const;
               } else {
+                new_pressure_sp = pressure_sp_min + temperature_scale * pow((temperature - temperature_sp_rbv), 2);
                 // Linear interpolation step
-                new_pressure_sp = -1;
               }
 
               // Check within user-set pressure bounds
