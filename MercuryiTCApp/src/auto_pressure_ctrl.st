@@ -22,6 +22,7 @@ PV(double, pressure_sp_max, "{P}VTI_SPC:PRESSURE:SP:MAX", Monitor);
 PV(double, pressure_const, "{P}VTI_SPC:PRESSURE:CONST", Monitor);
 PV(double, temperature_cutoff, "{P}VTI_SPC:TEMP:CUTOFF", Monitor);
 PV(double, temperature_scale, "{P}VTI_SPC:TEMP:SCALE", Monitor);
+PV(double, pressure_max_lookup, "{P}VTI_SPC:PRESSURE:SP:MAX:LKUP", Monitor);
 
 PV(double, temperature, "{P}{TEMP_CARD_NUM}:TEMP", Monitor);
 PV(double, temperature_sp_rbv, "{P}{TEMP_CARD_NUM}:TEMP:SP:RBV", Monitor);
@@ -66,7 +67,7 @@ ss auto_pressure_ctrl
                 new_pressure_sp = pressure_const;
               } else {
                 new_pressure_sp = pressure_sp_min + temperature_scale * pow((temperature - temperature_sp_rbv), 2);
-                // Linear interpolation step
+                new_pressure_sp = fmin(new_pressure_sp, pressure_max_lookup);
               }
 
               // Check within user-set pressure bounds

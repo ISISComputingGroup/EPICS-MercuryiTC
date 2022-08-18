@@ -27,7 +27,7 @@ record(ao, "$(P)VTI_SPC:TEMP:CUTOFF")
 
 record(ao, "$(P)VTI_SPC:TEMP:SCALE")
 {
-    field(DESC, "Scaling factor for temperature calculations")
+    field(DESC, "Scaling factor for temp calculations")
     field(VAL,  "$(TEMP_SCALE)")
     field(PINI, "YES")
 }
@@ -46,9 +46,23 @@ record(ao, "$(P)VTI_SPC:PRESSURE:SP:MAX")
     field(PINI, "YES")
 }
 
+record(cvt, "$(P)VTI_SPC:PRESSURE:SP:MAX:LKUP")
+{
+    field(SCAN, "Passive")
+    field(DESC, "Max pressure based on temp lookup")
+    field(INPX, "$(P)$(TEMP_CARD):TEMP CP MSS")
+    field(METH, "1D TABLE")
+    field(SPEC, "$(PRESSURE_MAX_LKUP=None.txt)")
+    field(TDIR, "$(SDIR)")
+    field(BDIR, "$(CALIB_BASE_DIR)")
+    field(PREC, "3")
+    field(EGU, "mbar")
+    info(archive, "VAL")
+}
+
 record(ao, "$(P)VTI_SPC:PRESSURE:CONST")
 {
     field(DESC, "Constant pressure used when below cutoff")
     field(VAL,  "$(PRESSURE_CONSTANT)")
-    feild(PINI, "YES")
+    field(PINI, "YES")
 }
