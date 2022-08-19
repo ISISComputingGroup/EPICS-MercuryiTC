@@ -17,6 +17,7 @@ option +s;
 
 PV(string, statemachine_state, "{P}VTI_SPC:STATEMACHINE:STATE", NoMon);
 PV(int, statemachine_enabled, "{P}VTI_SPC:STATEMACHINE:STATUS", Monitor);
+PV(int, statemachine_error, "{P}VTI_SPC:STATEMACHINE:ERROR", Monitor);
 PV(double, set_delay, "{P}VTI_SPC:SET_DELAY", Monitor);
 PV(double, pressure_sp_min, "{P}VTI_SPC:PRESSURE:SP:MIN", Monitor);
 PV(double, pressure_sp_max, "{P}VTI_SPC:PRESSURE:SP:MAX", Monitor);
@@ -51,7 +52,7 @@ ss auto_pressure_ctrl
             TRANSITION_TO_STATE("init");
         }
 
-        when(statemachine_enabled) {
+        when(!statemachine_error && statemachine_enabled) {
         } state calc_new_sp
     }
 
