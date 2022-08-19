@@ -7,7 +7,7 @@ record(mbbo, "$(P)VTI_SPC:STATEMACHINE:STATE")
     field(DESC, "Statemachine state")
     field(ZRST, "init")
     field(ONST, "calc_new_sp")
-    field(TWST, "update_delay")
+    field(TWST, "set_delay")
     field(THST, "polling_delay")
 }
 
@@ -16,6 +16,13 @@ record(bo, "$(P)VTI_SPC:STATEMACHINE:STATUS")
     field(DESC, "Whether the statemachine is enabled")
     field(ZNAM, "Off")
     field(ONAM, "On")
+}
+
+record(ao, "$(P)VTI_SPC:SET_DELAY")
+{
+    field(DESC, "Delay between pressure sp updates")
+    field(VAL,  "$(SET_DELAY)")
+    field(PINI, "YES")
 }
 
 record(ao, "$(P)VTI_SPC:TEMP:CUTOFF")

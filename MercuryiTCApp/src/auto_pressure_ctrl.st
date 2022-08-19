@@ -17,6 +17,7 @@ option +s;
 
 PV(string, statemachine_state, "{P}VTI_SPC:STATEMACHINE:STATE", NoMon);
 PV(int, statemachine_enabled, "{P}VTI_SPC:STATEMACHINE:STATUS", Monitor);
+PV(double, set_delay, "{P}VTI_SPC:SET_DELAY", Monitor);
 PV(double, pressure_sp_min, "{P}VTI_SPC:PRESSURE:SP:MIN", Monitor);
 PV(double, pressure_sp_max, "{P}VTI_SPC:PRESSURE:SP:MAX", Monitor);
 PV(double, pressure_const, "{P}VTI_SPC:PRESSURE:CONST", Monitor);
@@ -81,20 +82,20 @@ ss auto_pressure_ctrl
 
         when(new_pressure_sp != pressure_sp_rbv) {
           PVPUT(pressure_sp, new_pressure_sp);
-        } state update_delay
+        } state set_delay
 
         when(new_pressure_sp == pressure_sp_rbv) {
           // Do nothing.
         } state polling_delay
     }
 
-    state update_delay {
+    state set_delay {
       entry
       {
-        TRANSITION_TO_STATE("update_delay");
+        TRANSITION_TO_STATE("set_delay");
       }
 
-      when(delay(10)) {
+      when(delay(set_delay)) {
         // Avoid overloading the device.
       } state init
     }
