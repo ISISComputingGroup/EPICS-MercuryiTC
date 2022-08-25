@@ -9,6 +9,7 @@ record(mbbo, "$(P)VTI_SPC:STATEMACHINE:STATE")
     field(ONST, "calc_new_sp")
     field(TWST, "set_delay")
     field(THST, "polling_delay")
+    field(FRST, "error_delay")
 }
 
 record(bo, "$(P)VTI_SPC:STATEMACHINE:STATUS")
@@ -18,26 +19,43 @@ record(bo, "$(P)VTI_SPC:STATEMACHINE:STATUS")
     field(ONAM, "On")
 }
 
-record(calc, "$(P)VTI_SPC:STATEMACHINE:ERROR")
+record(mbbo, "$(P)VTI_SPC:STATEMACHINE:ERROR")
 {
     field(DESC, "Confguration errors for VTI SPC")
-    field(INPA, "$(P)VTI_SPC:PRESSURE:SP:MIN CP MSS")
-    field(INPB, "$(P)VTI_SPC:PRESSURE:SP:MAX CP MSS")
+    field(ZRST, "No errors")
+    field(ZRSV, "NO_ALARM")
 
-    field(CALC, "B < A")
+    field(ONST, "Min Pressure > Max")
+    field(ONSV, "INVALID")
 
-    field(LOW,  "0.5")
-    field(HIGH, "0.5")
-    field(LSV,  "NO_ALARM")
-    field(HSV,  "INVALID")
+    field(TWST, "Temp read failure")
+    field(TWSV, "MINOR")
 
     field(PINI, "YES")
+
+    info(interest, "HIGH")
+    info(archive, "VAL SEVR")
+    info(alarm, "VTISPC")
 }
 
 record(ao, "$(P)VTI_SPC:SET_DELAY")
 {
     field(DESC, "Delay between pressure sp updates")
     field(VAL,  "$(SET_DELAY)")
+    field(PINI, "YES")
+}
+
+record(ao, "$(P)VTI_SPC:POLL_DELAY")
+{
+    field(DESC, "Delay when pressure not changed")
+    field(VAL,  "1")
+    field(PINI, "YES")
+}
+
+record(ao, "$(P)VTI_SPC:ERROR_DELAY")
+{
+    field(DESC, "Delay when temp readback fails")
+    field(VAL,  "5")
     field(PINI, "YES")
 }
 
