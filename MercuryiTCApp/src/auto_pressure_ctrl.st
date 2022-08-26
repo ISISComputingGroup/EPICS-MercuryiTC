@@ -22,6 +22,7 @@ PV(int, statemachine_error, "{P}VTI_SPC:STATEMACHINE:ERROR", Monitor);
 PV(double, set_delay, "{P}VTI_SPC:SET_DELAY", Monitor);
 PV(double, polling_delay, "{P}VTI_SPC:POLL_DELAY", Monitor);
 PV(double, error_delay, "{P}VTI_SPC:ERROR_DELAY", Monitor);
+PV(string, pressure_id, "{P}VTI_SPC:PRESSURE_ID", Monitor);
 PV(double, pressure_sp_min, "{P}VTI_SPC:PRESSURE:SP:MIN", Monitor);
 PV(double, pressure_sp_max, "{P}VTI_SPC:PRESSURE:SP:MAX", Monitor);
 PV(double, pressure_const, "{P}VTI_SPC:PRESSURE:CONST", Monitor);
@@ -42,6 +43,7 @@ PV(double, pressure_sp, "{P}PRESSURE:{PRESSURE_CARD_NUM}:PRESSURE:SP", NoMon);
   static int const VTI_SPC_ERR_NONE = 0;
   static int const VTI_SPC_ERR_PRESSURE_LIMITS_INCONSISTENT = 1;
   static int const VTI_SPC_ERR_TEMP_READ_FAIL = 2;
+  static int const VTI_SPC_ERR_INVALID_PRESSURE_CARD = 3;
 
   double new_pressure_sp = 0.0;
 
@@ -52,6 +54,7 @@ PV(double, pressure_sp, "{P}PRESSURE:{PRESSURE_CARD_NUM}:PRESSURE:SP", NoMon);
   static void state_transition(SS_ID ssId, struct seqg_vars* const pVar, CH_ID index, const char* const new_state_name);
   static int readbacks_invalid(struct seqg_vars* const pVar);
   static int inconsistent_limits(struct seqg_vars* const pVar);
+  static int invalid_card(struct seqg_vars* const pVar);
 
 }%
 
@@ -63,14 +66,21 @@ ss auto_pressure_ctrl
         TRANSITION_TO_STATE("init");
       }
 
-      when(inconsistent_limits(pVar)) {
+      when(inconsistent_limits(pVar) && statemachine_enabled) {
         if(statemachine_error != "Min Pressure > Max") {
           PVPUT(statemachine_error, VTI_SPC_ERR_PRESSURE_LIMITS_INCONSISTENT);
           errlogSevPrintf(errlogMinor, "%s: Invalid configuration - Max pressure less than min pressure.\n", PROGRAM_NAME);
         }
       } state error_delay
 
-      when(!inconsistent_limits(pVar) && statemachine_enabled) {
+      when(invalid_card(pVar) && statemachine_enabled) {
+        if(statemachine_error != "Invalid pressure card") {
+          PVPUT(statemachine_error, VTI_SPC_ERR_INVALID_PRESSURE_CARD);
+          errlogSevPrintf(errlogMinor, "%s: Invalid configuration - Pressure card \"%s\" does not exist.\n", PROGRAM_NAME, pressure_id);
+        }
+      } state error_delay
+
+      when(!invalid_card(pVar) && !inconsistent_limits(pVar) && statemachine_enabled) {
       } state calc_new_sp
     }
 
@@ -173,5 +183,9 @@ ss auto_pressure_ctrl
   */
   static int inconsistent_limits(struct seqg_vars* const pVar) {
     return pVar->pressure_sp_min > pVar->pressure_sp_max;
+  }
+
+  static int invalid_card(struct seqg_vars* const pVar) {
+    return !(strcmp(pVar->pressure_id, "") && strcmp(pVar->pressure_id, "nodevice"));
   }
 }%
