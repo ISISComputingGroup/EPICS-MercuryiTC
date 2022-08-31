@@ -16,19 +16,19 @@ option +r;
 /* Safe mode */
 option +s;
 
-PV(string, statemachine_state, "{P}VTI_SPC:STATEMACHINE:STATE", NoMon);
-PV(int, statemachine_enabled, "{P}VTI_SPC:STATEMACHINE:STATUS", Monitor);
-PV(int, statemachine_error, "{P}VTI_SPC:STATEMACHINE:ERROR", Monitor);
-PV(double, set_delay, "{P}VTI_SPC:SET_DELAY", Monitor);
-PV(double, polling_delay, "{P}VTI_SPC:POLL_DELAY", Monitor);
-PV(double, error_delay, "{P}VTI_SPC:ERROR_DELAY", Monitor);
-PV(string, pressure_id, "{P}VTI_SPC:PRESSURE_ID", Monitor);
-PV(double, pressure_sp_min, "{P}VTI_SPC:PRESSURE:SP:MIN", Monitor);
-PV(double, pressure_sp_max, "{P}VTI_SPC:PRESSURE:SP:MAX", Monitor);
-PV(double, pressure_const, "{P}VTI_SPC:PRESSURE:CONST", Monitor);
-PV(double, temperature_cutoff, "{P}VTI_SPC:TEMP:CUTOFF", Monitor);
-PV(double, temperature_scale, "{P}VTI_SPC:TEMP:SCALE", Monitor);
-PV(double, pressure_max_lookup, "{P}VTI_SPC:PRESSURE:SP:MAX:LKUP", Monitor);
+PV(string, statemachine_state, "{P}VTI_SPC_{TEMP_CARD_NUM}:STATEMACHINE:STATE", NoMon);
+PV(int, statemachine_enabled, "{P}VTI_SPC_{TEMP_CARD_NUM}:STATEMACHINE:STATUS", Monitor);
+PV(int, statemachine_error, "{P}VTI_SPC_{TEMP_CARD_NUM}:STATEMACHINE:ERROR", Monitor);
+PV(double, set_delay, "{P}VTI_SPC_{TEMP_CARD_NUM}:SET_DELAY", Monitor);
+PV(double, polling_delay, "{P}VTI_SPC_{TEMP_CARD_NUM}:POLL_DELAY", Monitor);
+PV(double, error_delay, "{P}VTI_SPC_{TEMP_CARD_NUM}:ERROR_DELAY", Monitor);
+PV(string, pressure_id, "{P}VTI_SPC_{TEMP_CARD_NUM}:PRESSURE_ID", Monitor);
+PV(double, pressure_sp_min, "{P}VTI_SPC_{TEMP_CARD_NUM}:PRESSURE:SP:MIN", Monitor);
+PV(double, pressure_sp_max, "{P}VTI_SPC_{TEMP_CARD_NUM}:PRESSURE:SP:MAX", Monitor);
+PV(double, pressure_const, "{P}VTI_SPC_{TEMP_CARD_NUM}:PRESSURE:CONST", Monitor);
+PV(double, temperature_cutoff, "{P}VTI_SPC_{TEMP_CARD_NUM}:TEMP:CUTOFF", Monitor);
+PV(double, temperature_scale, "{P}VTI_SPC_{TEMP_CARD_NUM}:TEMP:SCALE", Monitor);
+PV(double, pressure_max_lookup, "{P}VTI_SPC_{TEMP_CARD_NUM}:PRESSURE:SP:MAX:LKUP", Monitor);
 
 PV(double, temperature, "{P}{TEMP_CARD_NUM}:TEMP", Monitor);
 PV(double, temperature_sevr, "{P}{TEMP_CARD_NUM}:TEMP.SEVR", Monitor);
@@ -55,6 +55,7 @@ PV(double, pressure_sp, "{P}PRESSURE:{PRESSURE_CARD_NUM}:PRESSURE:SP", NoMon);
   static int readbacks_invalid(struct seqg_vars* const pVar);
   static int inconsistent_limits(struct seqg_vars* const pVar);
   static int invalid_card(struct seqg_vars* const pVar);
+  static int temp_readback_invalid(struct seqg_vars* const pVar);
 
 }%
 
@@ -67,14 +68,14 @@ ss auto_pressure_ctrl
       }
 
       when(inconsistent_limits(pVar) && statemachine_enabled) {
-        if(statemachine_error != "Min Pressure > Max") {
+        if(statemachine_error != VTI_SPC_ERR_PRESSURE_LIMITS_INCONSISTENT) {
           PVPUT(statemachine_error, VTI_SPC_ERR_PRESSURE_LIMITS_INCONSISTENT);
           errlogSevPrintf(errlogMinor, "%s: Invalid configuration - Max pressure less than min pressure.\n", PROGRAM_NAME);
         }
       } state error_delay
 
       when(invalid_card(pVar) && statemachine_enabled) {
-        if(statemachine_error != "Invalid pressure card") {
+        if(statemachine_error != VTI_SPC_ERR_INVALID_PRESSURE_CARD) {
           PVPUT(statemachine_error, VTI_SPC_ERR_INVALID_PRESSURE_CARD);
           errlogSevPrintf(errlogMinor, "%s: Invalid configuration - Pressure card \"%s\" does not exist.\n", PROGRAM_NAME, pressure_id);
         }
@@ -118,7 +119,7 @@ ss auto_pressure_ctrl
         } state polling_delay
 
         when(temp_readback_invalid(pVar)) {
-          if(statemachine_error != "Temp read failure") {
+          if(statemachine_error != VTI_SPC_ERR_TEMP_READ_FAIL) {
             errlogSevPrintf(errlogMinor, "%s: Temperature readbacks invalid, no changes to pressure have been made.\n", PROGRAM_NAME);
             PVPUT(statemachine_error, VTI_SPC_ERR_TEMP_READ_FAIL);
           }

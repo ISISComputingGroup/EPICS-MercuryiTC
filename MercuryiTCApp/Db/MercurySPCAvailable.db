@@ -1,15 +1,15 @@
 # MACROS for IOC
 # P - base name of the IOC 
 # TEMP_CARD - temperature card number
-# IFSPC_PRESSURE - # not available blank available
-# IFNOTSPC_PRESSURE - # available blank not available
+# IFFLOW_SPC_PRESSURE - # not available blank available
+# IFNOTFLOW_SPC_PRESSURE - # available blank not available
 
 
 record(bi, "$(P)$(TEMP_CARD):SPC:AVAILABLE")
 {
     field(DESC, "Is Flow Full Auto available")
-    $(IFNOTSPC_PRESSURE) field(VAL, "0")
-    $(IFSPC_PRESSURE) field(VAL, "1")
+    $(IFNOTFLOW_SPC_PRESSURE_$(TEMP_CARD)) field(VAL, "0")
+    $(IFFLOW_SPC_PRESSURE_$(TEMP_CARD)) field(VAL, "1")
     field(ZNAM, "NO")
     field(ONAM, "YES")
 }
