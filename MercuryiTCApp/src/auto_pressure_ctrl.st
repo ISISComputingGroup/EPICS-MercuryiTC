@@ -16,19 +16,19 @@ option +r;
 /* Safe mode */
 option +s;
 
-PV(string, statemachine_state, "{P}VTI_SPC_{TEMP_CARD_NUM}:STATEMACHINE:STATE", NoMon);
-PV(int, statemachine_enabled, "{P}VTI_SPC_{TEMP_CARD_NUM}:STATEMACHINE:STATUS", Monitor);
-PV(int, statemachine_error, "{P}VTI_SPC_{TEMP_CARD_NUM}:STATEMACHINE:ERROR", Monitor);
-PV(double, set_delay, "{P}VTI_SPC_{TEMP_CARD_NUM}:SET_DELAY", Monitor);
-PV(double, polling_delay, "{P}VTI_SPC_{TEMP_CARD_NUM}:POLL_DELAY", Monitor);
-PV(double, error_delay, "{P}VTI_SPC_{TEMP_CARD_NUM}:ERROR_DELAY", Monitor);
-PV(string, pressure_id, "{P}VTI_SPC_{TEMP_CARD_NUM}:PRESSURE_ID", Monitor);
-PV(double, pressure_sp_min, "{P}VTI_SPC_{TEMP_CARD_NUM}:PRESSURE:SP:MIN", Monitor);
-PV(double, pressure_sp_max, "{P}VTI_SPC_{TEMP_CARD_NUM}:PRESSURE:SP:MAX", Monitor);
-PV(double, pressure_const, "{P}VTI_SPC_{TEMP_CARD_NUM}:PRESSURE:CONST", Monitor);
-PV(double, temperature_cutoff, "{P}VTI_SPC_{TEMP_CARD_NUM}:TEMP:CUTOFF", Monitor);
-PV(double, temperature_scale, "{P}VTI_SPC_{TEMP_CARD_NUM}:TEMP:SCALE", Monitor);
-PV(double, pressure_max_lookup, "{P}VTI_SPC_{TEMP_CARD_NUM}:PRESSURE:SP:MAX:LKUP", Monitor);
+PV(string, statemachine_state, "{P}{TEMP_CARD_NUM}:VTI_SPC:STATEMACHINE:STATE", NoMon);
+PV(int, statemachine_enabled, "{P}{TEMP_CARD_NUM}:VTI_SPC:STATEMACHINE:STATUS", Monitor);
+PV(int, statemachine_error, "{P}{TEMP_CARD_NUM}:VTI_SPC:STATEMACHINE:ERROR", Monitor);
+PV(double, set_delay, "{P}{TEMP_CARD_NUM}:VTI_SPC:SET_DELAY", Monitor);
+PV(double, polling_delay, "{P}{TEMP_CARD_NUM}:VTI_SPC:POLL_DELAY", Monitor);
+PV(double, error_delay, "{P}{TEMP_CARD_NUM}:VTI_SPC:ERROR_DELAY", Monitor);
+PV(string, pressure_id, "{P}{TEMP_CARD_NUM}:VTI_SPC:PRESSURE_ID", Monitor);
+PV(double, pressure_sp_min, "{P}{TEMP_CARD_NUM}:VTI_SPC:PRESSURE:SP:MIN", Monitor);
+PV(double, pressure_sp_max, "{P}{TEMP_CARD_NUM}:VTI_SPC:PRESSURE:SP:MAX", Monitor);
+PV(double, pressure_const, "{P}{TEMP_CARD_NUM}:VTI_SPC:PRESSURE:CONST", Monitor);
+PV(double, temperature_cutoff, "{P}{TEMP_CARD_NUM}:VTI_SPC:TEMP:CUTOFF", Monitor);
+PV(double, temperature_scale, "{P}{TEMP_CARD_NUM}:VTI_SPC:TEMP:SCALE", Monitor);
+PV(double, pressure_max_lookup, "{P}{TEMP_CARD_NUM}:VTI_SPC:PRESSURE:SP:MAX:LKUP", Monitor);
 
 PV(double, temperature, "{P}{TEMP_CARD_NUM}:TEMP", Monitor);
 PV(double, temperature_sevr, "{P}{TEMP_CARD_NUM}:TEMP.SEVR", Monitor);
