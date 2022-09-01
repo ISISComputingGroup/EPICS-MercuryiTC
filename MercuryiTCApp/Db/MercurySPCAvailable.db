@@ -3,6 +3,8 @@
 # TEMP_CARD - temperature card number
 # IFFLOW_SPC_PRESSURE - # not available blank available
 # IFNOTFLOW_SPC_PRESSURE - # available blank not available
+# IFVTI_SPC_PRESSURE - # not available, blank if available
+# IFNOTVTI_SPC_PRESSURE - # if available, blank if not available
 
 
 record(bi, "$(P)$(TEMP_CARD):SPC:AVAILABLE")
