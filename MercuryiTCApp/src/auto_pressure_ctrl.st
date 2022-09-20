@@ -1,6 +1,6 @@
 program auto_pressure_ctrl("P,PRESSURE_CARD_NUM,TEMP_CARD_NUM")
 
-#include "seqPVmacros.h"
+#include "ibexSeqPVmacros.h"
 %% #include "seq_snc.h"
 %% #include "errlog.h"
 %% #include "string.h"
