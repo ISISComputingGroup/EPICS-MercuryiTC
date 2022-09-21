@@ -130,11 +130,11 @@ ss auto_pressure_ctrl
       entry
       {
         TRANSITION_TO_STATE("set_delay");
+        PVPUT(statemachine_error, VTI_SPC_ERR_NONE);
       }
 
       when(delay(set_delay)) {
         // Avoid overloading the device.
-        PVPUT(statemachine_error, VTI_SPC_ERR_NONE);
       } state init
     }
 
@@ -142,11 +142,11 @@ ss auto_pressure_ctrl
       entry
       {
         TRANSITION_TO_STATE("polling_delay");
+        PVPUT(statemachine_error, VTI_SPC_ERR_NONE);
       }
 
       when(delay(polling_delay)) {
         // Avoid overloading the processor.
-        PVPUT(statemachine_error, VTI_SPC_ERR_NONE);
       } state init
     }
 
