@@ -12,7 +12,8 @@ DBD += MercuryiTC.dbd
 MercuryiTC_DBD += parse_catalog.dbd
 MercuryiTC_DBD += full_auto.dbd
 
-MercuryiTC_SRCS += parse_catalog.c full_auto.c user1DTableSub.c
+MercuryiTC_SRCS += parse_catalog.c full_auto.c user1DTableSub.c auto_pressure_ctrl.st
+MercuryiTC_LIBS += seq pv
 MercuryiTC_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 #===========================
